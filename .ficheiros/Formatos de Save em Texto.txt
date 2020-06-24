@@ -1,0 +1,8 @@
+PRODUCTS
+<code> \t <name> \t <category> \t <stock> \t <price>
+
+CLIENTS
+<id> \t <name> \t <city> \t <birthYear>
+
+SALES
+<id> \t <clientId> \t <productIdArray>
