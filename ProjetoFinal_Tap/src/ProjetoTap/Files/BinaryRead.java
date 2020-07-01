@@ -1,12 +1,10 @@
 package ProjetoTap.Files;
 
-import ProjetoTap.StructureActions.Create;
 import ProjetoTap.Data.Data;
 import ProjetoTap.Functions;
 import ProjetoTap.Data.Settings;
 import ProjetoTap.Structures.Client;
 import ProjetoTap.Structures.Product;
-import ProjetoTap.Structures.Result;
 import ProjetoTap.Structures.Sale;
 
 import java.io.File;
@@ -22,9 +20,9 @@ public class BinaryRead
     //      ██╔═══╝░██╔══██╗██║░░██║██║░░██║██║░░░██║██║░░██╗░░░██║░░░░╚═══██╗
     //      ██║░░░░░██║░░██║╚█████╔╝██████╔╝╚██████╔╝╚█████╔╝░░░██║░░░██████╔╝
     //      ╚═╝░░░░░╚═╝░░╚═╝░╚════╝░╚═════╝░░╚═════╝░░╚════╝░░░░╚═╝░░░╚═════╝░
-    public static Result readProducts()
+    public static int readProducts()
     {
-        if (!Functions.doesFileExist(Settings.productsBinaryPath)) return new Result(true, "The file '" + Settings.productsBinaryPath + "' was not found.");
+        if (!Functions.doesFileExist(Settings.productsBinaryPath)) return 0;
 
         try
         {
@@ -35,14 +33,15 @@ public class BinaryRead
 
             map.forEach((key, p) ->
             {
-                Create.createProduct(p, false);
+                System.out.println(key);
+                Data.products.put(key, p);
             });
 
-            return new Result(false, "The Products where successfully read and added to the list. (amount: '" + map.size() + "')");
+            return map.size();
         }
         catch (Exception ignored)
         {
-            return new Result(true, "There was an error reading the file.");
+            return -1;
         }
     }
     //      ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗░██████╗
@@ -51,9 +50,9 @@ public class BinaryRead
     //      ██║░░██╗██║░░░░░██║██╔══╝░░██║╚████║░░░██║░░░░╚═══██╗
     //      ╚█████╔╝███████╗██║███████╗██║░╚███║░░░██║░░░██████╔╝
     //      ░╚════╝░╚══════╝╚═╝╚══════╝╚═╝░░╚══╝░░░╚═╝░░░╚═════╝░
-    public static Result readClients()
+    public static int readClients()
     {
-        if (!Functions.doesFileExist(Settings.clientsBinaryPath)) return new Result(true, "The file '" + Settings.clientsBinaryPath + "' was not found.");
+        if (!Functions.doesFileExist(Settings.clientsBinaryPath)) return 0;
 
         try
         {
@@ -67,11 +66,11 @@ public class BinaryRead
                 Data.clients.put(key, c);
             });
 
-            return new Result(false, "The Clients where successfully read and added to the list. (amount: '" + map.size() + "')");
+            return map.size();
         }
         catch (Exception ignored)
         {
-            return new Result(true, "There was an error reading the file.");
+            return -1;
         }
     }
     //      ░██████╗░█████╗░██╗░░░░░███████╗░██████╗
@@ -80,9 +79,9 @@ public class BinaryRead
     //      ░╚═══██╗██╔══██║██║░░░░░██╔══╝░░░╚═══██╗
     //      ██████╔╝██║░░██║███████╗███████╗██████╔╝
     //      ╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═════╝░
-    public static Result readSales()
+    public static int readSales()
     {
-        if (!Functions.doesFileExist(Settings.salesBinaryPath)) return new Result(true, "The file '" + Settings.salesBinaryPath + "' was not found.");
+        if (!Functions.doesFileExist(Settings.salesBinaryPath)) return 0;
 
         try
         {
@@ -96,11 +95,11 @@ public class BinaryRead
                 Data.sales.put(key, s);
             });
 
-            return new Result(false, "The Sales where successfully read and added to the list. (amount: '" + map.size() + "')");
+            return map.size();
         }
         catch (Exception ignored)
         {
-            return new Result(true, "There was an error reading the file.");
+            return -1;
         }
     }
 }

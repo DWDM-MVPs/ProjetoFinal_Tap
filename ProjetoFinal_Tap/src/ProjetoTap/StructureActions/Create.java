@@ -1,6 +1,7 @@
 package ProjetoTap.StructureActions;
 
 import ProjetoTap.Data.Data;
+import ProjetoTap.Files.BinarySave;
 import ProjetoTap.Functions;
 import ProjetoTap.Structures.Client;
 import ProjetoTap.Structures.Product;

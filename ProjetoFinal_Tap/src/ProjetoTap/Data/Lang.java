@@ -46,6 +46,7 @@ public class Lang
     public static String clientUpdatedSuccessfully = "Cliente atualizado com sucesso.";
     public static String clientDeletedSuccessfully = "Cliente apagado com sucesso.";
     public static String productDeletedSuccessfully = "Produto apagado com sucesso.";
+    public static String pressAnyKeyToContinue = "Clique <ENTER> para continuar...";
     //      ███╗░░░███╗███████╗███╗░░██╗██╗░░░██╗░██████╗
     //      ████╗░████║██╔════╝████╗░██║██║░░░██║██╔════╝
     //      ██╔████╔██║█████╗░░██╔██╗██║██║░░░██║╚█████╗░
@@ -54,6 +55,7 @@ public class Lang
     //      ╚═╝░░░░░╚═╝╚══════╝╚═╝░░╚══╝░╚═════╝░╚═════╝░
     public static String mainMenu = "Menu Principal";
     public static String manageProductsMenu = "Gerir Produtos";
+    public static String productsMenu = "Produtos";
     public static String manageClientsMenu = "Gerir Clientes";
     public static String manageSalesMenu = "Gerir Vendas";
     public static String oldestClientMenu = "Idade máxima dos Clientes";
@@ -145,7 +147,9 @@ public class Lang
     public static String errorNotEnoughStock = colorRed + "ERRO: O Stock existente é menor que o Stock pedido." + colorReset;
     public static String errorClientHasNoSales = colorRed + "ERRO: O Cliente selecionado ainda não fez nenhuma Compra" + colorReset;
     public static String errorWrongClientAge = colorRed + "ERRO: A Idade introduzida não é válida." + colorReset;
+    public static String errorNoProductsFound = colorReset + "ERRO: Nenhum Produto encontrado." + colorReset;
     public static String errorNoClientsFound = colorRed + "ERRO: Nenhum Cliente encontrado." + colorReset;
+    public static String errorNoSalesFound = colorReset + "ERRO: Nenhuma Venda encontrada." + colorReset;
     public static String errorProductNotFound = colorRed + "ERRO: Produto não encontrado." + colorReset;
     public static String errorReadLowProductStock = colorRed + "ERRO: A quantidade em Stock tem de ser '0' ou maior." + colorReset;
     public static String errorReadLowOrNullProductStock = colorRed + "ERRO: A quantidade em Stock tem de ser maior que '0'." + colorReset;

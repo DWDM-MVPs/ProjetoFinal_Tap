@@ -5,6 +5,7 @@ import ProjetoTap.Data.Lang;
 import ProjetoTap.Files.BinaryRead;
 import ProjetoTap.Files.BinarySave;
 import ProjetoTap.Files.TextRead;
+import ProjetoTap.Files.TextSave;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,34 +28,42 @@ public class Main
     {
         // READ
         // READ PRODUCTS
-        BinaryRead.readProducts();
-        if (Data.products.size() == 0)
+        int readProducts = BinaryRead.readProducts();
+        if (readProducts == 0)
         {
             TextRead.readProducts();
         }
         // READ CLIENTS
-        BinaryRead.readClients();
-        if (Data.clients.size() == 0)
+        int readClients = BinaryRead.readClients();
+        if (readClients == 0)
         {
             TextRead.readClients();
         }
         // READ SALES
-        BinaryRead.readSales();
-        if (Data.sales.size() == 0)
+        int readSales = BinaryRead.readSales();
+        if (readSales == 0)
         {
             TextRead.readSales();
         }
+
+        System.out.println(readProducts);
+        System.out.println(readClients);
+        System.out.println(readSales);
 
         // SHOW THE MAIN MENU
         showMainMenu();
 
         // SAVE
         // SAVE PRODUCTS
-        BinarySave.saveProducts();
+        int savedProducts = BinarySave.saveProducts();
+        savedProducts += TextSave.saveProducts();
         // SAVE CLIENTS
-        BinarySave.saveClients();
+        int savedClients = BinarySave.saveClients();
         // SAVE SALES
-        BinarySave.saveSales();
+        int savesSales = BinarySave.saveSales();
+        System.out.println(savedProducts);
+        System.out.println(savedClients);
+        System.out.println(savesSales);
     }
     //      ██████╗░███████╗░█████╗░██████╗░  ███╗░░░███╗███████╗███╗░░██╗██╗░░░██╗  ░█████╗░██████╗░████████╗██╗░█████╗░███╗░░██╗
     //      ██╔══██╗██╔════╝██╔══██╗██╔══██╗  ████╗░████║██╔════╝████╗░██║██║░░░██║  ██╔══██╗██╔══██╗╚══██╔══╝██║██╔══██╗████╗░██║

@@ -11,6 +11,7 @@ import ProjetoTap.UserInput.ReadClient;
 import ProjetoTap.Structures.Client;
 import ProjetoTap.Structures.Sale;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,18 +37,15 @@ public class ClientsMenu
             System.out.println(Lang.colorGreen + "1. " + Lang.createClientMenu);
             System.out.println(Lang.colorGreen + "2. " + Lang.oldestClientMenu);
             System.out.println(Lang.colorGreen + "3. " + Lang.averageClientAgeMenu);
-            System.out.println(Lang.colorGreen + "4. " + Lang.clientViewPurchasesMenu);
-            System.out.println(Lang.colorGreen + "5. " + Lang.viewClientsByUpperAgeMenu);
-            System.out.println(Lang.colorGreen + "6. " + Lang.viewClientsByCityMenu);
-            System.out.println(Lang.colorGreen + "7. " + Lang.viewIfExistsByName);
-            System.out.println(Lang.colorGreen + "8. " + Lang.viewAgeModeMenu);
-            System.out.println(Lang.colorGreen + "9. " + Lang.mostSoldProductsMenu);
-            System.out.println(Lang.colorGreen + "10. " + Lang.mostExpensiveProductMenu);
-            System.out.println(Lang.colorGreen + "11. " + Lang.mostMoneySpentMenu);
-            System.out.println(Lang.colorGreen + "12. " + Lang.editClientMenu);
-            System.out.println(Lang.colorGreen + "13. " + Lang.removeClientMenu);
+            System.out.println(Lang.colorGreen + "4. " + Lang.viewClientsByUpperAgeMenu);
+            System.out.println(Lang.colorGreen + "5. " + Lang.viewClientsByCityMenu);
+            System.out.println(Lang.colorGreen + "6. " + Lang.viewIfExistsByName);
+            System.out.println(Lang.colorGreen + "7. " + Lang.viewAgeModeMenu);
+            System.out.println(Lang.colorGreen + "8. " + Lang.mostMoneySpentMenu);
+            System.out.println(Lang.colorGreen + "9. " + Lang.editClientMenu);
+            System.out.println(Lang.colorGreen + "10. " + Lang.removeClientMenu);
 
-            option = readMenuOption(1, 13);
+            option = readMenuOption(0, 10);
             switch (option)
             {
                 case 1: // CREATE CLIENT
@@ -59,34 +57,25 @@ public class ClientsMenu
                 case 3: // AVERAGE CLIENT AGE
                     showAverageClientAge();
                     break;
-                case 4: // VIEW PURCHASES
-                    showViewPurchases();
-                    break;
-                case 5: // VIEW CLIENTS BY UPPER AGE
+                case 4: // VIEW CLIENTS BY UPPER AGE
                     showViewClientsByUpperAge();
                     break;
-                case 6: // VIEW CLIENTS BY CITY
+                case 5: // VIEW CLIENTS BY CITY
                     showViewClientsByCity();
                     break;
-                case 7: // VIEW IF EXISTS BY NAME
+                case 6: // VIEW IF EXISTS BY NAME
                     showViewIfExistsByName();
                     break;
-                case 8: // VIEW AGE MODE
+                case 7: // VIEW AGE MODE
                     showViewAgeMode();
                     break;
-                case 9: // MOST SOLD PRODUCTS
-                    showMostSoldProducts();
-                    break;
-                case 10: // MOST EXPENSIVE PRODUCT
-                    showMostExpensiveProduct();
-                    break;
-                case 11: // MOST MONEY SPENT
+                case 8: // MOST MONEY SPENT
                     showMostMoneySpent();
                     break;
-                case 12: // EDIT CLIENT
+                case 9: // EDIT CLIENT
                     showEditClient();
                     break;
-                case 13: // REMOVE CLIENT
+                case 10: // REMOVE CLIENT
                     showRemoveClient();
                     break;
             }
@@ -117,6 +106,7 @@ public class ClientsMenu
         {
             System.out.println(Lang.clientCreatedSuccessfully);
         }
+        Functions.pressAnyKeyToContinue();
     }
     //      ░█████╗░██╗░░░░░██████╗░███████╗░██████╗████████╗  ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗
     //      ██╔══██╗██║░░░░░██╔══██╗██╔════╝██╔════╝╚══██╔══╝  ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝
@@ -128,17 +118,25 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.oldestClientMenu);
 
-        int oldestAge = 0;
-
-        for (Client c : Data.clients.values())
+        if (Data.clients.size() > 0)
         {
-            if (oldestAge < c.getAge())
-            {
-                oldestAge = c.getAge();
-            }
-        }
+            int oldestAge = 0;
 
-        System.out.println(String.format(Lang.oldestClientAge, oldestAge));
+            for (Client c : Data.clients.values())
+            {
+                if (oldestAge < c.getAge())
+                {
+                    oldestAge = c.getAge();
+                }
+            }
+
+            System.out.println(MessageFormat.format(Lang.oldestClientAge, oldestAge));
+        }
+        else
+        {
+            System.out.println(Lang.errorNoClientsFound);
+        }
+        Functions.pressAnyKeyToContinue();
     }
     //      ░█████╗░██╗░░░██╗███████╗██████╗░░█████╗░░██████╗░███████╗  ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗  ░█████╗░░██████╗░███████╗
     //      ██╔══██╗██║░░░██║██╔════╝██╔══██╗██╔══██╗██╔════╝░██╔════╝  ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝  ██╔══██╗██╔════╝░██╔════╝
@@ -150,69 +148,24 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.averageClientAgeMenu);
 
-        int ageSum = 0;
-
-        for (Client c : Data.clients.values())
+        if (Data.clients.size() > 0)
         {
-            ageSum += c.getAge();
-        }
+            int ageSum = 0;
 
-        int avgAge = ageSum / Data.clients.size();
-
-        System.out.println(String.format(Lang.averageClientAge, avgAge));
-    }
-    //      ██╗░░░██╗██╗███████╗░██╗░░░░░░░██╗  ██████╗░██╗░░░██╗██████╗░░█████╗░██╗░░██╗░█████╗░░██████╗███████╗░██████╗
-    //      ██║░░░██║██║██╔════╝░██║░░██╗░░██║  ██╔══██╗██║░░░██║██╔══██╗██╔══██╗██║░░██║██╔══██╗██╔════╝██╔════╝██╔════╝
-    //      ╚██╗░██╔╝██║█████╗░░░╚██╗████╗██╔╝  ██████╔╝██║░░░██║██████╔╝██║░░╚═╝███████║███████║╚█████╗░█████╗░░╚█████╗░
-    //      ░╚████╔╝░██║██╔══╝░░░░████╔═████║░  ██╔═══╝░██║░░░██║██╔══██╗██║░░██╗██╔══██║██╔══██║░╚═══██╗██╔══╝░░░╚═══██╗
-    //      ░░╚██╔╝░░██║███████╗░░╚██╔╝░╚██╔╝░  ██║░░░░░╚██████╔╝██║░░██║╚█████╔╝██║░░██║██║░░██║██████╔╝███████╗██████╔╝
-    //      ░░░╚═╝░░░╚═╝╚══════╝░░░╚═╝░░░╚═╝░░  ╚═╝░░░░░░╚═════╝░╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═════╝░╚══════╝╚═════╝░
-    public static void showViewPurchases()
-    {
-        Functions.prepareMenu(Lang.clientViewPurchasesMenu);
-
-        int id = ReadClient.existingClientId();
-
-        ArrayList<Sale> sales = new ArrayList<>();
-        for (Sale sale : Data.sales.values())
-        {
-            if (sale.getClientId() == id)
+            for (Client c : Data.clients.values())
             {
-                sales.add(sale);
+                ageSum += c.getAge();
             }
-        }
 
-        if (sales.size() > 0)
-        {
-            for (Sale s : sales)
-            {
-                System.out.println(String.format(Lang.listProductsForSaleForClient, s.getId(), s.getClientId()));
+            int avgAge = ageSum / Data.clients.size();
 
-                Map<Integer, Integer> productsMap = new HashMap<>();
-                for (Product p : s.getProducts())
-                {
-                    if (!productsMap.containsKey(p.getCode()))
-                    {
-                        productsMap.put(p.getCode(), 1);
-                    }
-                    else
-                    {
-                        int existingStock = productsMap.get(p.getCode());
-                        productsMap.put(p.getCode(), existingStock + 1);
-                    }
-                }
-
-                for (Integer key : productsMap.keySet())
-                {
-                    Product p = Get.getProduct(key);
-                    System.out.println(String.format(Lang.listedProductForSaleForClient, key, p.getName(), productsMap.get(key), p.getPrice() * key));
-                }
-            }
+            System.out.println(MessageFormat.format(Lang.averageClientAge, avgAge));
         }
         else
         {
-            System.out.println(Lang.errorClientHasNoSales);
+            System.out.println(Lang.errorNoClientsFound);
         }
+        Functions.pressAnyKeyToContinue();
     }
     //      ██╗░░░██╗██╗███████╗░██╗░░░░░░░██╗  ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗░██████╗  ██████╗░██╗░░░██╗  ██╗░░░██╗██████╗░██████╗░███████╗██████╗░  ░█████╗░░██████╗░███████╗
     //      ██║░░░██║██║██╔════╝░██║░░██╗░░██║  ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝██╔════╝  ██╔══██╗╚██╗░██╔╝  ██║░░░██║██╔══██╗██╔══██╗██╔════╝██╔══██╗  ██╔══██╗██╔════╝░██╔════╝
@@ -224,16 +177,24 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.viewClientsByUpperAgeMenu);
 
-        int baseAge = readAge();
-
-        System.out.println(String.format(Lang.clientsWithMoreAge, baseAge));
-        for (Client c : Data.clients.values())
+        if (Data.clients.size() > 0)
         {
-            if (c.getAge() >= baseAge)
+            int baseAge = readAge();
+
+            System.out.println(MessageFormat.format(Lang.clientsWithMoreAge, baseAge));
+            for (Client c : Data.clients.values())
             {
-                System.out.println(String.format(Lang.listedClient, c.getId(), c.getName(), c.getCity(), c.getAge()));
+                if (c.getAge() >= baseAge)
+                {
+                    System.out.println(MessageFormat.format(Lang.listedClient, c.getId(), c.getName(), c.getCity(), c.getAge()));
+                }
             }
         }
+        else
+        {
+            System.out.println(Lang.errorNoClientsFound);
+        }
+        Functions.pressAnyKeyToContinue();
     }
     public static int readAge()
     {
@@ -267,29 +228,37 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.viewClientsByCityMenu);
 
-        String city = ReadClient.clientCity();
-
-        ArrayList<Client> clients = new ArrayList<>();
-        for (Client c : Data.clients.values())
+        if (Data.clients.size() > 0)
         {
-            if (c.getCity().toLowerCase().equals(city.toLowerCase()))
+            String city = ReadClient.clientCity();
+
+            ArrayList<Client> clients = new ArrayList<>();
+            for (Client c : Data.clients.values())
             {
-                clients.add(c);
+                if (c.getCity().toLowerCase().equals(city.toLowerCase()))
+                {
+                    clients.add(c);
+                }
             }
-        }
 
-        System.out.println(String.format(Lang.clientsInCity, city));
-        if (clients.size() > 0)
-        {
-            for (Client c : clients)
+            System.out.println(MessageFormat.format(Lang.clientsInCity, city));
+            if (clients.size() > 0)
             {
-                System.out.println(String.format(Lang.listedClient, c.getId(), c.getName(), c.getCity(), c.getAge()));
+                for (Client c : clients)
+                {
+                    System.out.println(MessageFormat.format(Lang.listedClient, c.getId(), c.getName(), c.getCity(), c.getAge()));
+                }
+            }
+            else
+            {
+                System.out.println(Lang.errorNoClientsFound);
             }
         }
         else
         {
             System.out.println(Lang.errorNoClientsFound);
         }
+        Functions.pressAnyKeyToContinue();
     }
     //      ██╗░░░██╗██╗███████╗░██╗░░░░░░░██╗  ██╗███████╗  ███████╗██╗░░██╗██╗░██████╗████████╗░██████╗  ██████╗░██╗░░░██╗  ███╗░░██╗░█████╗░███╗░░░███╗███████╗
     //      ██║░░░██║██║██╔════╝░██║░░██╗░░██║  ██║██╔════╝  ██╔════╝╚██╗██╔╝██║██╔════╝╚══██╔══╝██╔════╝  ██╔══██╗╚██╗░██╔╝  ████╗░██║██╔══██╗████╗░████║██╔════╝
@@ -301,29 +270,37 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.viewIfExistsByCodeMenu);
 
-        String name = ReadClient.clientName();
-
-        ArrayList<Client> clients = new ArrayList<>();
-        for (Client c : Data.clients.values())
+        if (Data.clients.size() > 0)
         {
-            if (c.getName().toLowerCase().equals(name.toLowerCase()))
+            String name = ReadClient.clientName();
+
+            ArrayList<Client> clients = new ArrayList<>();
+            for (Client c : Data.clients.values())
             {
-                clients.add(c);
+                if (c.getName().toLowerCase().equals(name.toLowerCase()))
+                {
+                    clients.add(c);
+                }
             }
-        }
 
-        System.out.println(String.format(Lang.viewIfExistsByName, name));
-        if (clients.size() > 0)
-        {
-            for (Client c : clients)
+            System.out.println(MessageFormat.format(Lang.viewIfExistsByName, name));
+            if (clients.size() > 0)
             {
-                System.out.println(String.format(Lang.listedClient, c.getId(), c.getName(), c.getCity(), c.getAge()));
+                for (Client c : clients)
+                {
+                    System.out.println(MessageFormat.format(Lang.listedClient, c.getId(), c.getName(), c.getCity(), c.getAge()));
+                }
+            }
+            else
+            {
+                System.out.println(Lang.errorNoClientsFound);
             }
         }
         else
         {
             System.out.println(Lang.errorNoClientsFound);
         }
+        Functions.pressAnyKeyToContinue();
     }
     //      ██╗░░░██╗██╗███████╗░██╗░░░░░░░██╗  ░█████╗░░██████╗░███████╗  ███╗░░░███╗░█████╗░██████╗░███████╗
     //      ██║░░░██║██║██╔════╝░██║░░██╗░░██║  ██╔══██╗██╔════╝░██╔════╝  ████╗░████║██╔══██╗██╔══██╗██╔════╝
@@ -335,118 +312,45 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.viewAgeModeMenu);
 
-        Map<Integer, Integer> ageMap = new HashMap<>();
-        for (Client c : Data.clients.values())
+        if (Data.clients.size() > 0)
         {
-            if (!ageMap.containsKey(c.getAge()))
+            Map<Integer, Integer> ageMap = new HashMap<>();
+            for (Client c : Data.clients.values())
             {
-                ageMap.put(c.getAge(), 1);
-            }
-            else
-            {
-                int existingAge = ageMap.get(c.getAge());
-                ageMap.put(c.getAge(), existingAge + 1);
-            }
-        }
-
-        int oldestAge = 0;
-        StringBuilder ageString = new StringBuilder();
-        for (Integer age : ageMap.keySet())
-        {
-            if (age > oldestAge)
-            {
-                oldestAge = age;
-                ageString = new StringBuilder(age);
-            }
-
-            if (oldestAge == age)
-            {
-                ageString.append(", ").append(age);
-            }
-        }
-
-        System.out.println(String.format(Lang.listModeClientAge, ageString));
-    }
-    //      ███╗░░░███╗░█████╗░░██████╗████████╗  ░██████╗░█████╗░██╗░░░░░██████╗░  ██████╗░██████╗░░█████╗░██████╗░██╗░░░██╗░█████╗░████████╗░██████╗
-    //      ████╗░████║██╔══██╗██╔════╝╚══██╔══╝  ██╔════╝██╔══██╗██║░░░░░██╔══██╗  ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║░░░██║██╔══██╗╚══██╔══╝██╔════╝
-    //      ██╔████╔██║██║░░██║╚█████╗░░░░██║░░░  ╚█████╗░██║░░██║██║░░░░░██║░░██║  ██████╔╝██████╔╝██║░░██║██║░░██║██║░░░██║██║░░╚═╝░░░██║░░░╚█████╗░
-    //      ██║╚██╔╝██║██║░░██║░╚═══██╗░░░██║░░░  ░╚═══██╗██║░░██║██║░░░░░██║░░██║  ██╔═══╝░██╔══██╗██║░░██║██║░░██║██║░░░██║██║░░██╗░░░██║░░░░╚═══██╗
-    //      ██║░╚═╝░██║╚█████╔╝██████╔╝░░░██║░░░  ██████╔╝╚█████╔╝███████╗██████╔╝  ██║░░░░░██║░░██║╚█████╔╝██████╔╝╚██████╔╝╚█████╔╝░░░██║░░░██████╔╝
-    //      ╚═╝░░░░░╚═╝░╚════╝░╚═════╝░░░░╚═╝░░░  ╚═════╝░░╚════╝░╚══════╝╚═════╝░  ╚═╝░░░░░╚═╝░░╚═╝░╚════╝░╚═════╝░░╚═════╝░░╚════╝░░░░╚═╝░░░╚═════╝░
-    public static void showMostSoldProducts()
-    {
-        Functions.prepareMenu(Lang.mostSoldProductsMenu);
-
-        Map<Integer, Integer> productSales = new HashMap<>();
-        for (Sale s : Data.sales.values())
-        {
-            for (Product p : s.getProducts())
-            {
-                if (!productSales.containsKey(p.getCode()))
+                if (!ageMap.containsKey(c.getAge()))
                 {
-                    productSales.put(p.getCode(), 1);
+                    ageMap.put(c.getAge(), 1);
                 }
                 else
                 {
-                    int existingValue = productSales.get(p.getCode());
-                    productSales.put(p.getCode(), existingValue + 1);
+                    int existingAge = ageMap.get(c.getAge());
+                    ageMap.put(c.getAge(), existingAge + 1);
                 }
             }
-        }
 
-        int mostSales = 0;
-        ArrayList<Integer> mostSoldProducts = new ArrayList<>();
-        for (Integer key : productSales.keySet())
-        {
-            int sales = productSales.get(key);
-            if (sales > 0)
+            int oldestAge = 0;
+            StringBuilder ageString = new StringBuilder();
+            for (Integer age : ageMap.keySet())
             {
-                mostSales = sales;
-                mostSoldProducts.clear();
-            }
-            if (sales == mostSales)
-            {
-                mostSoldProducts.add(key);
-            }
-        }
+                if (age > oldestAge)
+                {
+                    oldestAge = age;
+                    ageString = new StringBuilder(age);
+                }
 
-        System.out.println(String.format(Lang.mostSoldProducts, mostSales));
-        for (Integer code : mostSoldProducts)
-        {
-            Product p = Get.getProduct(code);
-            System.out.println(String.format(Lang.listedProductByMostSales, code, p.getName(), p.getCategory(), p.getPrice(), p.getPrice()));
-        }
-    }
-    //      ███╗░░░███╗░█████╗░░██████╗████████╗  ███████╗██╗░░██╗██████╗░███████╗███╗░░██╗░██████╗██╗██╗░░░██╗███████╗  ██████╗░██████╗░░█████╗░██████╗░██╗░░░██╗░█████╗░████████╗
-    //      ████╗░████║██╔══██╗██╔════╝╚══██╔══╝  ██╔════╝╚██╗██╔╝██╔══██╗██╔════╝████╗░██║██╔════╝██║██║░░░██║██╔════╝  ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║░░░██║██╔══██╗╚══██╔══╝
-    //      ██╔████╔██║██║░░██║╚█████╗░░░░██║░░░  █████╗░░░╚███╔╝░██████╔╝█████╗░░██╔██╗██║╚█████╗░██║╚██╗░██╔╝█████╗░░  ██████╔╝██████╔╝██║░░██║██║░░██║██║░░░██║██║░░╚═╝░░░██║░░░
-    //      ██║╚██╔╝██║██║░░██║░╚═══██╗░░░██║░░░  ██╔══╝░░░██╔██╗░██╔═══╝░██╔══╝░░██║╚████║░╚═══██╗██║░╚████╔╝░██╔══╝░░  ██╔═══╝░██╔══██╗██║░░██║██║░░██║██║░░░██║██║░░██╗░░░██║░░░
-    //      ██║░╚═╝░██║╚█████╔╝██████╔╝░░░██║░░░  ███████╗██╔╝╚██╗██║░░░░░███████╗██║░╚███║██████╔╝██║░░╚██╔╝░░███████╗  ██║░░░░░██║░░██║╚█████╔╝██████╔╝╚██████╔╝╚█████╔╝░░░██║░░░
-    //      ╚═╝░░░░░╚═╝░╚════╝░╚═════╝░░░░╚═╝░░░  ╚══════╝╚═╝░░╚═╝╚═╝░░░░░╚══════╝╚═╝░░╚══╝╚═════╝░╚═╝░░░╚═╝░░░╚══════╝  ╚═╝░░░░░╚═╝░░╚═╝░╚════╝░╚═════╝░░╚═════╝░░╚════╝░░░░╚═╝░░░
-    public static void showMostExpensiveProduct()
-    {
-        Functions.prepareMenu(Lang.mostExpensiveProductMenu);
-
-        double mostExpensive = 0;
-        int code = -1;
-        for (Product p : Data.products.values())
-        {
-            if (p.getPrice() > mostExpensive)
-            {
-                mostExpensive = p.getPrice();
-                code = p.getCode();
+                if (oldestAge == age)
+                {
+                    ageString.append(", ").append(age);
+                }
             }
-        }
 
-        if (code != -1)
-        {
-            Product p = Get.getProduct(code);
-            System.out.println(String.format(Lang.listMostExpensiveProduct, code, p.getName(), p.getCategory(), p.getStock(), p.getPrice()));
+            System.out.println(MessageFormat.format(Lang.listModeClientAge, ageString));
         }
         else
         {
-            System.out.println(Lang.errorUnknown);
+            System.out.println(Lang.errorNoClientsFound);
         }
+        Functions.pressAnyKeyToContinue();
     }
     //      ███╗░░░███╗░█████╗░░██████╗████████╗  ███╗░░░███╗░█████╗░███╗░░██╗███████╗██╗░░░██╗  ░██████╗██████╗░███████╗███╗░░██╗████████╗
     //      ████╗░████║██╔══██╗██╔════╝╚══██╔══╝  ████╗░████║██╔══██╗████╗░██║██╔════╝╚██╗░██╔╝  ██╔════╝██╔══██╗██╔════╝████╗░██║╚══██╔══╝
@@ -458,30 +362,38 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.mostMoneySpentMenu);
 
-        double mostMoneySpent = 0;
-        Map<Integer, Double> clients = new HashMap<>();
-        for (Sale s : Data.sales.values())
+        if (Data.clients.size() > 0)
         {
-            for (Product p : s.getProducts())
+            double mostMoneySpent = 0;
+            Map<Integer, Double> clients = new HashMap<>();
+            for (Sale s : Data.sales.values())
             {
-                if (!clients.containsKey(s.getClientId()))
+                for (Product p : s.getProducts())
                 {
-                    clients.put(s.getClientId(), p.getPrice());
-                }
-                else
-                {
-                    double existingValue = clients.get(s.getClientId());
-                    clients.put(s.getClientId(), existingValue + p.getPrice());
+                    if (!clients.containsKey(s.getClientId()))
+                    {
+                        clients.put(s.getClientId(), p.getPrice());
+                    }
+                    else
+                    {
+                        double existingValue = clients.get(s.getClientId());
+                        clients.put(s.getClientId(), existingValue + p.getPrice());
+                    }
                 }
             }
-        }
 
-        System.out.println(String.format(Lang.listClientMostMoneySpent, mostMoneySpent));
-        for (Integer id : clients.keySet())
-        {
-            Client c = Get.getClient(id);
-            System.out.println(String.format(Lang.listedClientMostMoneySpent, id, c.getName(), c.getCity(), c.getAge()));
+            System.out.println(MessageFormat.format(Lang.listClientMostMoneySpent, mostMoneySpent));
+            for (Integer id : clients.keySet())
+            {
+                Client c = Get.getClient(id);
+                System.out.println(MessageFormat.format(Lang.listedClientMostMoneySpent, id, c.getName(), c.getCity(), c.getAge()));
+            }
         }
+        else
+        {
+            System.out.println(Lang.errorNoSalesFound);
+        }
+        Functions.pressAnyKeyToContinue();
     }
     //      ███████╗██████╗░██╗████████╗  ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗
     //      ██╔════╝██╔══██╗██║╚══██╔══╝  ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝
@@ -493,33 +405,41 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.editClientMenu);
 
-        int id = ReadClient.existingClientId();
-        Client c = Get.getClient(id);
-
-        String newName = c.getName();
-        String newCity = c.getCity();
-        int newBirthYear = c.getBirthYear();
-
-        System.out.println(Lang.editClientName);
-        if (Functions.readBoolean())
+        if (Data.clients.size() > 0)
         {
-            newName = ReadClient.clientName();
-        }
-        System.out.println(Lang.editClientCity);
-        if (Functions.readBoolean())
-        {
-            newCity = ReadClient.clientCity();
-        }
-        System.out.println(Lang.editClientBirthYear);
-        if (Functions.readBoolean())
-        {
-            newBirthYear = ReadClient.clientBirthYear();
-        }
+            int id = ReadClient.existingClientId();
+            Client c = Get.getClient(id);
 
-        Client newClient = new Client(id, newName, newCity, newBirthYear);
-        Data.clients.put(id, newClient);
+            String newName = c.getName();
+            String newCity = c.getCity();
+            int newBirthYear = c.getBirthYear();
 
-        System.out.println(Lang.clientUpdatedSuccessfully);
+            System.out.println(Lang.editClientName);
+            if (Functions.readBoolean())
+            {
+                newName = ReadClient.clientName();
+            }
+            System.out.println(Lang.editClientCity);
+            if (Functions.readBoolean())
+            {
+                newCity = ReadClient.clientCity();
+            }
+            System.out.println(Lang.editClientBirthYear);
+            if (Functions.readBoolean())
+            {
+                newBirthYear = ReadClient.clientBirthYear();
+            }
+
+            Client newClient = new Client(id, newName, newCity, newBirthYear);
+            Data.clients.put(id, newClient);
+
+            System.out.println(Lang.clientUpdatedSuccessfully);
+        }
+        else
+        {
+            System.out.println(Lang.errorNoClientsFound);
+        }
+        Functions.pressAnyKeyToContinue();
     }
     //      ██████╗░███████╗███╗░░░███╗░█████╗░██╗░░░██╗███████╗  ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗
     //      ██╔══██╗██╔════╝████╗░████║██╔══██╗██║░░░██║██╔════╝  ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝
@@ -531,14 +451,22 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.removeClientMenu);
 
-        int id = ReadClient.existingClientId();
-
-        System.out.println(String.format(Lang.confirmClientDelete, id));
-        if (Functions.readBoolean())
+        if (Data.clients.size() > 0)
         {
-            Data.clients.remove(id);
+            int id = ReadClient.existingClientId();
 
-            System.out.println(Lang.clientDeletedSuccessfully);
+            System.out.println(MessageFormat.format(Lang.confirmClientDelete, id));
+            if (Functions.readBoolean())
+            {
+                Data.clients.remove(id);
+
+                System.out.println(Lang.clientDeletedSuccessfully);
+            }
         }
+        else
+        {
+            System.out.println(Lang.errorNoClientsFound);
+        }
+        Functions.pressAnyKeyToContinue();
     }
 }

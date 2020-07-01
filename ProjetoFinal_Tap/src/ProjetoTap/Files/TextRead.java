@@ -7,7 +7,6 @@ import ProjetoTap.Functions;
 import ProjetoTap.Data.Settings;
 import ProjetoTap.Structures.Client;
 import ProjetoTap.Structures.Product;
-import ProjetoTap.Structures.Result;
 import ProjetoTap.Structures.Sale;
 
 import java.io.BufferedReader;
@@ -22,9 +21,9 @@ public class TextRead
     //      ██╔═══╝░██╔══██╗██║░░██║██║░░██║██║░░░██║██║░░██╗░░░██║░░░░╚═══██╗
     //      ██║░░░░░██║░░██║╚█████╔╝██████╔╝╚██████╔╝╚█████╔╝░░░██║░░░██████╔╝
     //      ╚═╝░░░░░╚═╝░░╚═╝░╚════╝░╚═════╝░░╚═════╝░░╚════╝░░░░╚═╝░░░╚═════╝░
-    public static Result readProducts()
+    public static int readProducts()
     {
-        if (Functions.doesFileExist(Settings.productsTextPath)) return new Result(true, "The file '" + Settings.productsTextPath + "' was not found.");
+        if (Functions.doesFileExist(Settings.productsTextPath)) return -1;
 
         int code;
         String name;
@@ -33,7 +32,7 @@ public class TextRead
         double price;
 
         String line;
-        int successfulReadings = 0, failedReadings = 0;
+        int successfulReadings = 0;
 
         try
         {
@@ -54,18 +53,15 @@ public class TextRead
                     Create.createProduct(code, name, category, stock, price, true);
                     successfulReadings++;
                 }
-                catch (Exception ignored)
-                {
-                    failedReadings++;
-                }
+                catch (Exception ignored) { }
             }
         }
         catch (Exception ex)
         {
-            return new Result(true, "There was an error reading the file.");
+            return -1;
         }
 
-        return new Result(false, "The Products from the file '" + Settings.productsTextPath + "' were successfully imported! ('" + successfulReadings + "' imported, '" + failedReadings + "' failed)");
+        return successfulReadings;
     }
     //      ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗░██████╗
     //      ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝██╔════╝
@@ -73,9 +69,9 @@ public class TextRead
     //      ██║░░██╗██║░░░░░██║██╔══╝░░██║╚████║░░░██║░░░░╚═══██╗
     //      ╚█████╔╝███████╗██║███████╗██║░╚███║░░░██║░░░██████╔╝
     //      ░╚════╝░╚══════╝╚═╝╚══════╝╚═╝░░╚══╝░░░╚═╝░░░╚═════╝░
-    public static Result readClients()
+    public static int readClients()
     {
-        if (Functions.doesFileExist(Settings.clientsTextPath)) return new Result(true, "The file '" + Settings.clientsTextPath + "' was not found.");
+        if (Functions.doesFileExist(Settings.clientsTextPath)) return -1;
 
         int id;
         String name;
@@ -83,7 +79,7 @@ public class TextRead
         int birthYear;
 
         String line;
-        int successfulReadings = 0, failedReadings = 0;
+        int successfulReadings = 0;
 
         try
         {
@@ -91,7 +87,7 @@ public class TextRead
 
             while ((line = bf.readLine()) != null)
             {
-                java.lang.String[] splitLine = line.split("\t");
+                String[] splitLine = line.split("\t");
 
                 try
                 {
@@ -106,18 +102,16 @@ public class TextRead
 
                     successfulReadings++;
                 }
-                catch (Exception ignored)
-                {
-                    failedReadings++;
-                }
+                catch (Exception ignored) { }
             }
         }
         catch (Exception ignored)
         {
-            return new Result(true, "There was an error reading the file.");
+            System.out.println(ignored.getMessage());
+            return -1;
         }
 
-        return new Result(false, "The Clients from the file '" + Settings.clientsTextPath + "' were successfully imported! ('" + successfulReadings + "' imported, '" + failedReadings + "' failed)");
+        return successfulReadings;
     }
     //      ░██████╗░█████╗░██╗░░░░░███████╗░██████╗
     //      ██╔════╝██╔══██╗██║░░░░░██╔════╝██╔════╝
@@ -125,16 +119,16 @@ public class TextRead
     //      ░╚═══██╗██╔══██║██║░░░░░██╔══╝░░░╚═══██╗
     //      ██████╔╝██║░░██║███████╗███████╗██████╔╝
     //      ╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═════╝░
-    public static Result readSales()
+    public static int readSales()
     {
-        if (Functions.doesFileExist(Settings.salesTextPath)) return new Result(true, "The file '" + Settings.salesTextPath + "' was not found.");
+        if (Functions.doesFileExist(Settings.salesTextPath)) return -1;
 
         int id;
         int clientId;
         ArrayList<Product> products = new ArrayList<>();
 
         String line;
-        int successfulReadings = 0, failedReadings = 0;
+        int successfulReadings = 0;
 
         try
         {
@@ -184,17 +178,14 @@ public class TextRead
 
                     successfulReadings++;
                 }
-                catch (Exception ignored)
-                {
-                    failedReadings++;
-                }
+                catch (Exception ignored) { }
             }
         }
         catch (Exception ignored)
         {
-            return new Result(true, "There was an error reading the file.");
+            return -1;
         }
 
-        return new Result(false, "The Clients from the file '" + Settings.salesTextPath + "' were successfully imported! ('" + successfulReadings + "' imported, '" + failedReadings + "' failed)");
+        return successfulReadings;
     }
 }

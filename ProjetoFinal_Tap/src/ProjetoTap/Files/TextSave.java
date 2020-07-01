@@ -3,7 +3,6 @@ package ProjetoTap.Files;
 import ProjetoTap.Data.Data;
 import ProjetoTap.Data.Settings;
 import ProjetoTap.Structures.Product;
-import ProjetoTap.Structures.Result;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -11,9 +10,9 @@ import java.io.PrintWriter;
 
 public class TextSave
 {
-    public static Result saveProducts()
+    public static int saveProducts()
     {
-        if (Data.products.size() == 0) return new Result(true, "There are no Products to save.");
+        if (Data.products.size() == 0) return 0;
 
         try
         {
@@ -26,11 +25,11 @@ public class TextSave
 
             writer.close();
 
-            return new Result(false, "Saved '" + Data.products.size() + "' Products to the file.");
+            return Data.products.size();
         }
         catch (Exception ignored)
         {
-            return new Result(true, "There was an error writing to the file '" + Settings.clientsTextPath + "'.");
+            return -1;
         }
     }
     //      ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗░██████╗
@@ -39,9 +38,9 @@ public class TextSave
     //      ██║░░██╗██║░░░░░██║██╔══╝░░██║╚████║░░░██║░░░░╚═══██╗
     //      ╚█████╔╝███████╗██║███████╗██║░╚███║░░░██║░░░██████╔╝
     //      ░╚════╝░╚══════╝╚═╝╚══════╝╚═╝░░╚══╝░░░╚═╝░░░╚═════╝░
-    public static Result saveClients()
+    public static int saveClients()
     {
-        if (Data.products.size() == 0) return new Result(true, "There are no Clients to save.");
+        if (Data.products.size() == 0) return 0;
 
         try
         {
@@ -54,11 +53,11 @@ public class TextSave
 
             writer.close();
 
-            return new Result(false, "Saved '" + Data.clients.size() + "' Clients to the file.");
+            return Data.clients.size();
         }
         catch (Exception ignored)
         {
-            return new Result(true, "There was an error writing to the file '" + Settings.clientsTextPath + "'.");
+            return -1;
         }
     }
     //      ░██████╗░█████╗░██╗░░░░░███████╗░██████╗
@@ -67,9 +66,9 @@ public class TextSave
     //      ░╚═══██╗██╔══██║██║░░░░░██╔══╝░░░╚═══██╗
     //      ██████╔╝██║░░██║███████╗███████╗██████╔╝
     //      ╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═════╝░
-    public static Result saveSales()
+    public static int saveSales()
     {
-        if (Data.sales.size() == 0) return new Result(true, "There are no Sales to save.");
+        if (Data.sales.size() == 0) return 0;
 
         try
         {
@@ -96,11 +95,11 @@ public class TextSave
 
             writer.close();
 
-            return new Result(false, "Saved '" + Data.sales.size() + "' Sales to the file.");
+            return Data.sales.size();
         }
         catch (Exception ignored)
         {
-            return new Result(true, "There was an error writing to the file '" + Settings.salesTextPath + "'.");
+            return -1;
         }
     }
 }

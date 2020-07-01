@@ -5,6 +5,8 @@ import ProjetoTap.Data.Settings;
 import ProjetoTap.Functions;
 import ProjetoTap.Data.Lang;
 
+import java.text.MessageFormat;
+
 import static ProjetoTap.Functions.errorReset;
 import static ProjetoTap.Main.readString;
 import static ProjetoTap.Main.sc;
@@ -26,7 +28,7 @@ public class ReadClient
 
             if (!canAlreadyExist && Data.clients.containsKey(code))
             {
-                errorReset(String.format(Lang.readWrongClientId, code));
+                errorReset(MessageFormat.format(Lang.readWrongClientId, code));
                 return clientId(false);
             }
             return code;

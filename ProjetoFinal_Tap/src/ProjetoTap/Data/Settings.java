@@ -8,14 +8,18 @@ public class Settings
     //      ██╔══╝░░██║██║░░░░░██╔══╝░░░╚═══██╗
     //      ██║░░░░░██║███████╗███████╗██████╔╝
     //      ╚═╝░░░░░╚═╝╚══════╝╚══════╝╚═════╝░
-    public static String productsTextPath = "data\\products.txt";
-    public static String productsBinaryPath = "data\\products.bin";
+    public static String filesDirectory = "data";
 
-    public static String clientsTextPath = "data\\clients.txt";
-    public static String clientsBinaryPath = "data\\clients.bin";
 
-    public static String salesTextPath = "data\\sales.txt";
-    public static String salesBinaryPath = "data\\sales.bin";
+
+    public static String productsTextPath = filesDirectory + "\\products.txt";
+    public static String productsBinaryPath = filesDirectory + "\\products.bin";
+
+    public static String clientsTextPath = filesDirectory + "\\clients.txt";
+    public static String clientsBinaryPath = filesDirectory + "\\clients.bin";
+
+    public static String salesTextPath = filesDirectory + "\\sales.txt";
+    public static String salesBinaryPath = filesDirectory + "\\sales.bin";
     //      ██╗░░░██╗░█████╗░██╗░░░░░██╗██████╗░░█████╗░████████╗██╗░█████╗░███╗░░██╗░██████╗
     //      ██║░░░██║██╔══██╗██║░░░░░██║██╔══██╗██╔══██╗╚══██╔══╝██║██╔══██╗████╗░██║██╔════╝
     //      ╚██╗░██╔╝███████║██║░░░░░██║██║░░██║███████║░░░██║░░░██║██║░░██║██╔██╗██║╚█████╗░

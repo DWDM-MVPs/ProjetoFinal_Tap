@@ -5,9 +5,11 @@ import ProjetoTap.Data.Data;
 import ProjetoTap.Functions;
 import ProjetoTap.Data.Lang;
 import ProjetoTap.StructureActions.Get;
+import ProjetoTap.Structures.Sale;
 import ProjetoTap.UserInput.ReadProduct;
 import ProjetoTap.Structures.Product;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +29,7 @@ public class ProductsMenu
         int option;
         do
         {
-            Functions.prepareMenu(Lang.colorYellow + Lang.salesMenu);
+            Functions.prepareMenu(Lang.colorYellow + Lang.productsMenu);
 
             System.out.println(Lang.colorYellow + "0. " + Lang.exit);
             System.out.println(Lang.colorGreen + "1. " + Lang.listProducts);
@@ -40,8 +42,10 @@ public class ProductsMenu
             System.out.println(Lang.colorGreen + "8. " + Lang.editProductMenu);
             System.out.println(Lang.colorGreen + "9. " + Lang.removeProductMenu);
             System.out.println(Lang.colorGreen + "10. " + Lang.removeStockMenu);
+            System.out.println(Lang.colorGreen + "11. " + Lang.mostExpensiveProductMenu);
+            System.out.println(Lang.colorGreen + "12. " + Lang.mostSoldProducts);
 
-            option = readMenuOption(0, 10);
+            option = readMenuOption(0, 12);
             switch (option)
             {
                 case 1: // LIST PRODUCTS
@@ -74,6 +78,12 @@ public class ProductsMenu
                 case 10: // REMOVE STOCK
                     showRemoveStock();
                     break;
+                case 11: // MOST EXPENSIVE PRODUCT
+                    showMostExpensiveProduct();
+                    break;
+                case 12: // MOST SOLD PRODUCTS
+                    showMostSoldProducts();
+                    break;
             }
         } while (option != 0);
     }
@@ -87,36 +97,44 @@ public class ProductsMenu
     {
         Functions.prepareMenu(Lang.listProducts);
 
-        Map<String, ArrayList<Product>> productsMap = new HashMap<>();
-
-        for (Product p : Data.products.values())
+        if (Data.products.size() > 0)
         {
-            if (!productsMap.containsKey(p.getCategory()))
-            {
-                ArrayList<Product> productsArray = new ArrayList<>();
-                productsArray.add(p);
+            Map<String, ArrayList<Product>> productsMap = new HashMap<>();
 
-                productsMap.put(p.getCategory(), productsArray);
+            for (Product p : Data.products.values())
+            {
+                if (!productsMap.containsKey(p.getCategory()))
+                {
+                    ArrayList<Product> productsArray = new ArrayList<>();
+                    productsArray.add(p);
+
+                    productsMap.put(p.getCategory(), productsArray);
+                }
+                else
+                {
+                    ArrayList<Product> productsArray = productsMap.get(p.getCategory());
+                    productsArray.add(p);
+
+                    productsMap.put(p.getCategory(), productsArray);
+                }
             }
-            else
-            {
-                ArrayList<Product> productsArray = productsMap.get(p.getCategory());
-                productsArray.add(p);
 
-                productsMap.put(p.getCategory(), productsArray);
+            for (String category : productsMap.keySet())
+            {
+                System.out.println(category);
+                ArrayList<Product> categoryProducts = productsMap.get(category);
+
+                for (Product p : categoryProducts)
+                {
+                    System.out.println(p.getCode() + " - " + p.getName() + " - " + p.getStock() + " - " +  p.getPrice());
+                }
             }
         }
-
-        for (String category : productsMap.keySet())
+        else
         {
-            System.out.println(category);
-            ArrayList<Product> categoryProducts = productsMap.get(category);
-
-            for (Product p : categoryProducts)
-            {
-                System.out.println(p.getCode() + " - " + p.getName() + " - " + p.getStock() + " - " +  p.getPrice());
-            }
+            System.out.println(Lang.errorNoProductsFound);
         }
+        Functions.pressAnyKeyToContinue();
     }
     //      ░█████╗░██████╗░███████╗░█████╗░████████╗███████╗  ██████╗░██████╗░░█████╗░██████╗░██╗░░░██╗░█████╗░████████╗
     //      ██╔══██╗██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██╔════╝  ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║░░░██║██╔══██╗╚══██╔══╝
@@ -144,8 +162,7 @@ public class ProductsMenu
         {
             System.out.println(Lang.productCreatedSuccessfully);
         }
-
-        showListProducts();
+        Functions.pressAnyKeyToContinue();
     }
     //      ░█████╗░░█████╗░████████╗███████╗░██████╗░░█████╗░██████╗░██╗███████╗░██████╗  ░██████╗██╗███████╗███████╗
     //      ██╔══██╗██╔══██╗╚══██╔══╝██╔════╝██╔════╝░██╔══██╗██╔══██╗██║██╔════╝██╔════╝  ██╔════╝██║╚════██║██╔════╝
@@ -159,23 +176,38 @@ public class ProductsMenu
 
         Map<String, Integer> categoriesSize = new HashMap<>();
 
-        for (Product p : Data.products.values())
+        if (Data.products.size() > 0)
         {
-            if (categoriesSize.containsKey(p.getCategory()))
+            for (Product p : Data.products.values())
             {
-                categoriesSize.put(p.getCategory(), 1);
+                if (categoriesSize.containsKey(p.getCategory()))
+                {
+                    categoriesSize.put(p.getCategory(), 1);
+                }
+                else
+                {
+                    int currentValue = categoriesSize.get(p.getCategory());
+                    categoriesSize.put(p.getCategory(), currentValue + 1);
+                }
+            }
+
+            if (categoriesSize.size() > 0)
+            {
+                for (String a : categoriesSize.keySet())
+                {
+                    System.out.println(MessageFormat.format(Lang.categoriesSizeList, a, categoriesSize.get(a)));
+                }
             }
             else
             {
-                int currentValue = categoriesSize.get(p.getCategory());
-                categoriesSize.put(p.getCategory(), currentValue + 1);
+                System.out.println(Lang.errorUnknown);
             }
         }
-
-        for (String a : categoriesSize.keySet())
+        else
         {
-            System.out.println(String.format(Lang.categoriesSizeList, a, categoriesSize.get(a)));
+            System.out.println(Lang.errorNoProductsFound);
         }
+        Functions.pressAnyKeyToContinue();
     }
     //      ██╗░░░░░██╗░██████╗████████╗  ░█████╗░██╗░░░██╗████████╗  ░█████╗░███████╗  ░██████╗████████╗░█████╗░░█████╗░██╗░░██╗
     //      ██║░░░░░██║██╔════╝╚══██╔══╝  ██╔══██╗██║░░░██║╚══██╔══╝  ██╔══██╗██╔════╝  ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║░██╔╝
@@ -187,30 +219,38 @@ public class ProductsMenu
     {
         Functions.prepareMenu(Lang.listOutOfStockMenu);
 
-        ArrayList<String> outOfStockProducts = new ArrayList<>();
-
-        for (Product p : Data.products.values())
+        if (Data.products.size() > 0)
         {
-            if (p.getStock() == 0)
-            {
-                outOfStockProducts.add(p.getName() + " (#" + p.getCode() + ")");
-            }
-        }
+            ArrayList<String> outOfStockProducts = new ArrayList<>();
 
-        StringBuilder outString = null;
-        for (String s : outOfStockProducts)
+            for (Product p : Data.products.values())
+            {
+                if (p.getStock() == 0)
+                {
+                    outOfStockProducts.add(p.getName() + " (#" + p.getCode() + ")");
+                }
+            }
+
+            StringBuilder outString = null;
+            for (String s : outOfStockProducts)
+            {
+                if (outString == null)
+                {
+                    outString = new StringBuilder(s);
+                }
+                else
+                {
+                    outString.append(", ").append(s);
+                }
+            }
+
+            System.out.println(Lang.outOfStockProducts);
+        }
+        else
         {
-            if (outString == null)
-            {
-                outString = new StringBuilder(s);
-            }
-            else
-            {
-                outString.append(", ").append(s);
-            }
+            System.out.println(Lang.errorNoProductsFound);
         }
-
-        System.out.println(Lang.outOfStockProducts);
+        Functions.pressAnyKeyToContinue();
     }
     //      ██╗░░░██╗██╗███████╗░██╗░░░░░░░██╗  ██╗███████╗  ██████╗░██████╗░░█████╗░██████╗░██╗░░░██╗░█████╗░████████╗  ███████╗██╗░░██╗██╗░██████╗████████╗░██████╗  ██████╗░██╗░░░██╗  ░█████╗░░█████╗░██████╗░███████╗
     //      ██║░░░██║██║██╔════╝░██║░░██╗░░██║  ██║██╔════╝  ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║░░░██║██╔══██╗╚══██╔══╝  ██╔════╝╚██╗██╔╝██║██╔════╝╚══██╔══╝██╔════╝  ██╔══██╗╚██╗░██╔╝  ██╔══██╗██╔══██╗██╔══██╗██╔════╝
@@ -222,17 +262,25 @@ public class ProductsMenu
     {
         Functions.prepareMenu(Lang.viewIfProductExistsByCodeMenu);
 
-        int code = ReadProduct.productCode(true);
-
-        if (Data.products.containsKey(code))
+        if (Data.products.size() > 0)
         {
-            Product p = Data.products.get(code);
-            System.out.println(String.format(Lang.listedProductFoundByCode, code, p.getName(), p.getCategory(), p.getStock(), p.getPrice()));
+            int code = ReadProduct.productCode(true);
+
+            if (Data.products.containsKey(code))
+            {
+                Product p = Data.products.get(code);
+                System.out.println(MessageFormat.format(Lang.listedProductFoundByCode, code, p.getName(), p.getCategory(), p.getStock(), p.getPrice()));
+            }
+            else
+            {
+                System.out.println(Lang.errorProductNotFound);
+            }
         }
         else
         {
-            System.out.println(Lang.errorProductNotFound);
+            System.out.println(Lang.errorNoProductsFound);
         }
+        Functions.pressAnyKeyToContinue();
     }
     //      ░█████╗░██╗░░░██╗███████╗██████╗░░█████╗░░██████╗░███████╗  ██████╗░██████╗░██╗░█████╗░███████╗  ██████╗░███████╗██████╗░  ░█████╗░░█████╗░████████╗███████╗░██████╗░░█████╗░██████╗░██╗░░░██╗
     //      ██╔══██╗██║░░░██║██╔════╝██╔══██╗██╔══██╗██╔════╝░██╔════╝  ██╔══██╗██╔══██╗██║██╔══██╗██╔════╝  ██╔══██╗██╔════╝██╔══██╗  ██╔══██╗██╔══██╗╚══██╔══╝██╔════╝██╔════╝░██╔══██╗██╔══██╗╚██╗░██╔╝
@@ -244,31 +292,35 @@ public class ProductsMenu
     {
         Functions.prepareMenu(Lang.averagePricePerCategoryMenu);
 
-        Map<String, Integer> categoriesSize = new HashMap<>();
-        Map<String, Double> categoriesValue = new HashMap<>();
-        for (Product p : Data.products.values())
+        if (Data.products.size() > 0)
         {
-            if (!categoriesSize.containsKey(p.getCategory()))
+            Map<String, Integer> categoriesSize = new HashMap<>();
+            Map<String, Double> categoriesValue = new HashMap<>();
+            for (Product p : Data.products.values())
             {
-                categoriesSize.put(p.getCategory(), 1);
-                categoriesValue.put(p.getCategory(), p.getPrice());
-            }
-            else
-            {
-                int existingSizeValue = categoriesSize.get(p.getCategory());
-                categoriesSize.put(p.getCategory(), existingSizeValue + 1);
+                if (!categoriesSize.containsKey(p.getCategory()))
+                {
+                    categoriesSize.put(p.getCategory(), 1);
+                    categoriesValue.put(p.getCategory(), p.getPrice());
+                }
+                else
+                {
+                    int existingSizeValue = categoriesSize.get(p.getCategory());
+                    categoriesSize.put(p.getCategory(), existingSizeValue + 1);
 
-                double existingValueValue = categoriesValue.get(p.getCategory());
-                categoriesValue.put(p.getCategory(), existingValueValue + p.getPrice());
+                    double existingValueValue = categoriesValue.get(p.getCategory());
+                    categoriesValue.put(p.getCategory(), existingValueValue + p.getPrice());
+                }
+            }
+
+            System.out.println(Lang.averagePricePerCategory);
+            for (String category : categoriesSize.keySet())
+            {
+                double averagePrice = categoriesValue.get(category) / categoriesSize.get(category);
+                System.out.println(" » " + category + " - " + averagePrice + " €");
             }
         }
-
-        System.out.println(Lang.averagePricePerCategory);
-        for (String category : categoriesSize.keySet())
-        {
-            double averagePrice = categoriesValue.get(category) / categoriesSize.get(category);
-            System.out.println(" » " + category + " - " + averagePrice + " €");
-        }
+        Functions.pressAnyKeyToContinue();
     }
     //      ░█████╗░██████╗░██████╗░  ░██████╗████████╗░█████╗░░█████╗░██╗░░██╗
     //      ██╔══██╗██╔══██╗██╔══██╗  ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║░██╔╝
@@ -280,13 +332,21 @@ public class ProductsMenu
     {
         Functions.prepareMenu(Lang.addStockMenu);
 
-        int code = ReadProduct.existingProductCode();
-        int stock = ReadProduct.productStock(true);
+        if (Data.products.size() > 0)
+        {
+            int code = ReadProduct.existingProductCode();
+            int stock = ReadProduct.productStock(true);
 
-        Product p = Data.products.get(code);
-        p.addStock(stock);
+            Product p = Data.products.get(code);
+            p.addStock(stock);
 
-        Data.products.put(p.getCode(), p);
+            Data.products.put(p.getCode(), p);
+        }
+        else
+        {
+            System.out.println(Lang.errorNoProductsFound);
+        }
+        Functions.pressAnyKeyToContinue();
     }
     //      ███████╗██████╗░██╗████████╗  ██████╗░██████╗░░█████╗░██████╗░██╗░░░██╗░█████╗░████████╗
     //      ██╔════╝██╔══██╗██║╚══██╔══╝  ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║░░░██║██╔══██╗╚══██╔══╝
@@ -298,38 +358,46 @@ public class ProductsMenu
     {
         Functions.prepareMenu(Lang.editProductMenu);
 
-        int code = ReadProduct.existingProductCode();
-        Product p = Get.getProduct(code);
-
-        String newName = p.getName(), newCategory = p.getCategory();
-        int newStock = p.getStock();
-        double newPrice = p.getPrice();
-
-        System.out.println(Lang.editProductName);
-        if (Functions.readBoolean())
+        if (Data.products.size() > 0)
         {
-            newName = ReadProduct.productName();
-        }
-        System.out.println(Lang.editProductCategory);
-        if (Functions.readBoolean())
-        {
-            newCategory = ReadProduct.productCategory();
-        }
-        System.out.println(Lang.editProductStock);
-        if (Functions.readBoolean())
-        {
-            newStock = ReadProduct.productStock(false);
-        }
-        System.out.println(Lang.editProductPrice);
-        if (Functions.readBoolean())
-        {
-            newPrice = ReadProduct.productPrice();
-        }
+            int code = ReadProduct.existingProductCode();
+            Product p = Get.getProduct(code);
 
-        Product newProduct = new Product(code, newName, newCategory, newStock, newPrice);
-        Data.products.put(code, newProduct);
+            String newName = p.getName(), newCategory = p.getCategory();
+            int newStock = p.getStock();
+            double newPrice = p.getPrice();
 
-        System.out.println(Lang.productUpdatedSuccessfully);
+            System.out.println(Lang.editProductName);
+            if (Functions.readBoolean())
+            {
+                newName = ReadProduct.productName();
+            }
+            System.out.println(Lang.editProductCategory);
+            if (Functions.readBoolean())
+            {
+                newCategory = ReadProduct.productCategory();
+            }
+            System.out.println(Lang.editProductStock);
+            if (Functions.readBoolean())
+            {
+                newStock = ReadProduct.productStock(false);
+            }
+            System.out.println(Lang.editProductPrice);
+            if (Functions.readBoolean())
+            {
+                newPrice = ReadProduct.productPrice();
+            }
+
+            Product newProduct = new Product(code, newName, newCategory, newStock, newPrice);
+            Data.products.put(code, newProduct);
+
+            System.out.println(Lang.productUpdatedSuccessfully);
+        }
+        else
+        {
+            System.out.println(Lang.errorNoProductsFound);
+        }
+        Functions.pressAnyKeyToContinue();
     }
     //      ██████╗░███████╗███╗░░░███╗░█████╗░██╗░░░██╗███████╗  ██████╗░██████╗░░█████╗░██████╗░██╗░░░██╗░█████╗░████████╗
     //      ██╔══██╗██╔════╝████╗░████║██╔══██╗██║░░░██║██╔════╝  ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║░░░██║██╔══██╗╚══██╔══╝
@@ -341,15 +409,23 @@ public class ProductsMenu
     {
         Functions.prepareMenu(Lang.removeProductMenu);
 
-        int code = ReadProduct.existingProductCode();
-
-        System.out.println(String.format(Lang.confirmProductDelete, code));
-        if (Functions.readBoolean())
+        if (Data.products.size() > 0)
         {
-            Data.products.remove(code);
+            int code = ReadProduct.existingProductCode();
 
-            System.out.println(Lang.productDeletedSuccessfully);
+            System.out.println(MessageFormat.format(Lang.confirmProductDelete, code));
+            if (Functions.readBoolean())
+            {
+                Data.products.remove(code);
+
+                System.out.println(Lang.productDeletedSuccessfully);
+            }
         }
+        else
+        {
+            System.out.println(Lang.errorNoProductsFound);
+        }
+        Functions.pressAnyKeyToContinue();
     }
     //      ██████╗░███████╗███╗░░░███╗░█████╗░██╗░░░██╗███████╗  ░██████╗████████╗░█████╗░░█████╗░██╗░░██╗
     //      ██╔══██╗██╔════╝████╗░████║██╔══██╗██║░░░██║██╔════╝  ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║░██╔╝
@@ -361,21 +437,126 @@ public class ProductsMenu
     {
         Functions.prepareMenu(Lang.removeStockMenu);
 
-        int code = ReadProduct.existingProductCode();
-        Product p = Get.getProduct(code);
-
-        int stock;
-        do
+        if (Data.products.size() > 0)
         {
-            stock = ReadProduct.productStock(true);
-            if (stock > p.getStock())
+            int code = ReadProduct.existingProductCode();
+            Product p = Get.getProduct(code);
+
+            int stock;
+            do
             {
-                System.out.println(Lang.errorInvalidRemoveStock);
+                stock = ReadProduct.productStock(true);
+                if (stock > p.getStock())
+                {
+                    System.out.println(Lang.errorInvalidRemoveStock);
+                }
+            } while (stock > p.getStock());
+
+            p.removeStock(stock);
+
+            Data.products.put(p.getCode(), p);
+        }
+        else
+        {
+            System.out.println(Lang.errorNoProductsFound);
+        }
+        Functions.pressAnyKeyToContinue();
+    }
+    //      ███╗░░░███╗░█████╗░░██████╗████████╗  ███████╗██╗░░██╗██████╗░███████╗███╗░░██╗░██████╗██╗██╗░░░██╗███████╗  ██████╗░██████╗░░█████╗░██████╗░██╗░░░██╗░█████╗░████████╗
+    //      ████╗░████║██╔══██╗██╔════╝╚══██╔══╝  ██╔════╝╚██╗██╔╝██╔══██╗██╔════╝████╗░██║██╔════╝██║██║░░░██║██╔════╝  ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║░░░██║██╔══██╗╚══██╔══╝
+    //      ██╔████╔██║██║░░██║╚█████╗░░░░██║░░░  █████╗░░░╚███╔╝░██████╔╝█████╗░░██╔██╗██║╚█████╗░██║╚██╗░██╔╝█████╗░░  ██████╔╝██████╔╝██║░░██║██║░░██║██║░░░██║██║░░╚═╝░░░██║░░░
+    //      ██║╚██╔╝██║██║░░██║░╚═══██╗░░░██║░░░  ██╔══╝░░░██╔██╗░██╔═══╝░██╔══╝░░██║╚████║░╚═══██╗██║░╚████╔╝░██╔══╝░░  ██╔═══╝░██╔══██╗██║░░██║██║░░██║██║░░░██║██║░░██╗░░░██║░░░
+    //      ██║░╚═╝░██║╚█████╔╝██████╔╝░░░██║░░░  ███████╗██╔╝╚██╗██║░░░░░███████╗██║░╚███║██████╔╝██║░░╚██╔╝░░███████╗  ██║░░░░░██║░░██║╚█████╔╝██████╔╝╚██████╔╝╚█████╔╝░░░██║░░░
+    //      ╚═╝░░░░░╚═╝░╚════╝░╚═════╝░░░░╚═╝░░░  ╚══════╝╚═╝░░╚═╝╚═╝░░░░░╚══════╝╚═╝░░╚══╝╚═════╝░╚═╝░░░╚═╝░░░╚══════╝  ╚═╝░░░░░╚═╝░░╚═╝░╚════╝░╚═════╝░░╚═════╝░░╚════╝░░░░╚═╝░░░
+    public static void showMostExpensiveProduct()
+    {
+        Functions.prepareMenu(Lang.mostExpensiveProductMenu);
+
+        if (Data.products.size() > 0)
+        {
+            double mostExpensive = 0;
+            int code = -1;
+            for (Product p : Data.products.values())
+            {
+                if (p.getPrice() > mostExpensive)
+                {
+                    mostExpensive = p.getPrice();
+                    code = p.getCode();
+                }
             }
-        } while (stock > p.getStock());
 
-        p.removeStock(stock);
+            if (code != -1)
+            {
+                Product p = Get.getProduct(code);
+                System.out.println(MessageFormat.format(Lang.listMostExpensiveProduct, code, p.getName(), p.getCategory(), p.getStock(), p.getPrice()));
+            }
+            else
+            {
+                System.out.println(Lang.errorUnknown);
+            }
+        }
+        else
+        {
+            System.out.println(Lang.errorNoProductsFound);
+        }
+        Functions.pressAnyKeyToContinue();
+    }
+    //      ███╗░░░███╗░█████╗░░██████╗████████╗  ░██████╗░█████╗░██╗░░░░░██████╗░  ██████╗░██████╗░░█████╗░██████╗░██╗░░░██╗░█████╗░████████╗░██████╗
+    //      ████╗░████║██╔══██╗██╔════╝╚══██╔══╝  ██╔════╝██╔══██╗██║░░░░░██╔══██╗  ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║░░░██║██╔══██╗╚══██╔══╝██╔════╝
+    //      ██╔████╔██║██║░░██║╚█████╗░░░░██║░░░  ╚█████╗░██║░░██║██║░░░░░██║░░██║  ██████╔╝██████╔╝██║░░██║██║░░██║██║░░░██║██║░░╚═╝░░░██║░░░╚█████╗░
+    //      ██║╚██╔╝██║██║░░██║░╚═══██╗░░░██║░░░  ░╚═══██╗██║░░██║██║░░░░░██║░░██║  ██╔═══╝░██╔══██╗██║░░██║██║░░██║██║░░░██║██║░░██╗░░░██║░░░░╚═══██╗
+    //      ██║░╚═╝░██║╚█████╔╝██████╔╝░░░██║░░░  ██████╔╝╚█████╔╝███████╗██████╔╝  ██║░░░░░██║░░██║╚█████╔╝██████╔╝╚██████╔╝╚█████╔╝░░░██║░░░██████╔╝
+    //      ╚═╝░░░░░╚═╝░╚════╝░╚═════╝░░░░╚═╝░░░  ╚═════╝░░╚════╝░╚══════╝╚═════╝░  ╚═╝░░░░░╚═╝░░╚═╝░╚════╝░╚═════╝░░╚═════╝░░╚════╝░░░░╚═╝░░░╚═════╝░
+    public static void showMostSoldProducts()
+    {
+        Functions.prepareMenu(Lang.mostSoldProductsMenu);
 
-        Data.products.put(p.getCode(), p);
+        if (Data.sales.size() > 0)
+        {
+            Map<Integer, Integer> productSales = new HashMap<>();
+            for (Sale s : Data.sales.values())
+            {
+                for (Product p : s.getProducts())
+                {
+                    if (!productSales.containsKey(p.getCode()))
+                    {
+                        productSales.put(p.getCode(), 1);
+                    }
+                    else
+                    {
+                        int existingValue = productSales.get(p.getCode());
+                        productSales.put(p.getCode(), existingValue + 1);
+                    }
+                }
+            }
+
+            int mostSales = 0;
+            ArrayList<Integer> mostSoldProducts = new ArrayList<>();
+            for (Integer key : productSales.keySet())
+            {
+                int sales = productSales.get(key);
+                if (sales > 0)
+                {
+                    mostSales = sales;
+                    mostSoldProducts.clear();
+                }
+                if (sales == mostSales)
+                {
+                    mostSoldProducts.add(key);
+                }
+            }
+
+            System.out.println(MessageFormat.format(Lang.mostSoldProducts, mostSales));
+            for (Integer code : mostSoldProducts)
+            {
+                Product p = Get.getProduct(code);
+                System.out.println(MessageFormat.format(Lang.listedProductByMostSales, code, p.getName(), p.getCategory(), p.getPrice(), p.getPrice()));
+            }
+        }
+        else
+        {
+            System.out.println(Lang.errorNoSalesFound);
+        }
+        Functions.pressAnyKeyToContinue();
     }
 }

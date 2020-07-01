@@ -2,7 +2,6 @@ package ProjetoTap.Files;
 
 import ProjetoTap.Data.Data;
 import ProjetoTap.Data.Settings;
-import ProjetoTap.Structures.Result;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,10 +15,8 @@ public class BinarySave
     //      ██╔═══╝░██╔══██╗██║░░██║██║░░██║██║░░░██║██║░░██╗░░░██║░░░░╚═══██╗
     //      ██║░░░░░██║░░██║╚█████╔╝██████╔╝╚██████╔╝╚█████╔╝░░░██║░░░██████╔╝
     //      ╚═╝░░░░░╚═╝░░╚═╝░╚════╝░╚═════╝░░╚═════╝░░╚════╝░░░░╚═╝░░░╚═════╝░
-    public static Result saveProducts()
+    public static int saveProducts()
     {
-        if (Data.products.size() == 0) return new Result(true, "There are no Products to save.");
-
         try
         {
             FileOutputStream fos = new FileOutputStream(new File(Settings.productsBinaryPath));
@@ -27,11 +24,11 @@ public class BinarySave
 
             oos.writeObject(Data.products);
 
-            return new Result(false, "The Products where successfully saved to the file '" + Settings.productsBinaryPath + "'.");
+            return Data.products.size();
         }
         catch (Exception ignored)
         {
-            return new Result(true, "There was an error writing to the file.");
+            return -1;
         }
     }
     //      ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗░██████╗
@@ -40,9 +37,9 @@ public class BinarySave
     //      ██║░░██╗██║░░░░░██║██╔══╝░░██║╚████║░░░██║░░░░╚═══██╗
     //      ╚█████╔╝███████╗██║███████╗██║░╚███║░░░██║░░░██████╔╝
     //      ░╚════╝░╚══════╝╚═╝╚══════╝╚═╝░░╚══╝░░░╚═╝░░░╚═════╝░
-    public static Result saveClients()
+    public static int saveClients()
     {
-        if (Data.clients.size() == 0) return new Result(true, "There are no Clients to save.");
+        if (Data.clients.size() == 0) return 0;
 
         try
         {
@@ -51,11 +48,11 @@ public class BinarySave
 
             oos.writeObject(Data.clients);
 
-            return new Result(false, "The Clients where successfully saved to the file '" + Settings.clientsBinaryPath + "'.");
+            return Data.clients.size();
         }
         catch (Exception ignored)
         {
-            return new Result(true, "There was an error writing to the file.");
+            return -1;
         }
     }
     //      ░██████╗░█████╗░██╗░░░░░███████╗░██████╗
@@ -64,9 +61,9 @@ public class BinarySave
     //      ░╚═══██╗██╔══██║██║░░░░░██╔══╝░░░╚═══██╗
     //      ██████╔╝██║░░██║███████╗███████╗██████╔╝
     //      ╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═════╝░
-    public static Result saveSales()
+    public static int saveSales()
     {
-        if (Data.sales.size() == 0) return new Result(true, "There are no Sales to save.");
+        if (Data.sales.size() == 0) return 0;
 
         try
         {
@@ -75,11 +72,11 @@ public class BinarySave
 
             oos.writeObject(Data.sales);
 
-            return new Result(false, "The Sales where successfully saved to the file '" + Settings.salesBinaryPath + "'.");
+            return Data.sales.size();
         }
         catch (Exception ignored)
         {
-            return new Result(true, "There was an error writing to the file.");
+            return -1;
         }
     }
 }

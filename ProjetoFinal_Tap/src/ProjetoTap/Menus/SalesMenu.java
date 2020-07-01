@@ -10,6 +10,7 @@ import ProjetoTap.UserInput.ReadClient;
 import ProjetoTap.UserInput.ReadProduct;
 import ProjetoTap.Structures.Product;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +37,7 @@ public class SalesMenu
             System.out.println(Lang.colorYellow + "0. " + Lang.exit);
             System.out.println(Lang.colorGreen + "1. " + Lang.makeSaleMenu);
             System.out.println(Lang.colorGreen + "2. " + Lang.categoriesWithMostSalesMenu);
+            System.out.println(Lang.colorGreen + "3. " + Lang.clientViewPurchasesMenu);
 
             option = readMenuOption(0, 3);
             switch (option)
@@ -45,6 +47,9 @@ public class SalesMenu
                     break;
                 case 2: // CATEGORIES WITH MOST SALES
                     showCategoriesWithMostSales();
+                    break;
+                case 3: // VIEW CLIENT PURCHASES
+                    showViewClientPurchases();
                     break;
             }
         } while (option != 0);
@@ -59,54 +64,66 @@ public class SalesMenu
     {
         Functions.prepareMenu(Lang.buyProducts);
 
-        int clientId = ReadClient.existingClientId();
-
-        Map<Integer, Integer> saleProducts = new HashMap<>();
-
-        do
+        if (Data.products.size() <= 0)
         {
-            int productCode = ReadProduct.existingProductCode();
-            int stock = ReadProduct.productStock(true);
+            System.out.println(Lang.errorNoProductsFound);
+        }
+        else if (Data.clients.size() <= 0)
+        {
+            System.out.println(Lang.errorNoClientsFound);
+        }
+        else
+        {
+            int clientId = ReadClient.existingClientId();
 
-            if (Data.products.get(productCode).getStock() < stock)
+            Map<Integer, Integer> saleProducts = new HashMap<>();
+
+            do
             {
-                System.out.println(Lang.errorNotEnoughStock);
-            }
-            else
-            {
-                if (Data.products.get(productCode).getStock() == stock)
+                int productCode = ReadProduct.existingProductCode();
+                int stock = ReadProduct.productStock(true);
+
+                if (Data.products.get(productCode).getStock() < stock)
                 {
-                    System.out.println(String.format(Lang.outOfStock, Data.products.get(productCode).getName()));
-                }
-                if (saleProducts.containsKey(productCode))
-                {
-                    saleProducts.put(productCode, stock);
+                    System.out.println(Lang.errorNotEnoughStock);
                 }
                 else
                 {
-                    int amount = saleProducts.get(productCode);
+                    if (Data.products.get(productCode).getStock() == stock)
+                    {
+                        System.out.println(MessageFormat.format(Lang.outOfStock, Data.products.get(productCode).getName()));
+                    }
+                    if (saleProducts.containsKey(productCode))
+                    {
+                        saleProducts.put(productCode, stock);
+                    }
+                    else
+                    {
+                        int amount = saleProducts.get(productCode);
 
-                    saleProducts.put(productCode, amount + stock);
+                        saleProducts.put(productCode, amount + stock);
+                    }
+                }
+            } while (addMoreProducts());
+
+            ArrayList<Product> productsArray = new ArrayList<>();
+            for (int key : saleProducts.keySet())
+            {
+                Product p = Get.getProduct(saleProducts.get(key));
+
+                p.removeStock(key);
+                Data.products.put(p.getCode(), p);
+
+                for (int i = 0; i < key; i++)
+                {
+                    productsArray.add(p);
                 }
             }
-        } while (addMoreProducts());
 
-        ArrayList<Product> productsArray = new ArrayList<>();
-        for (int key : saleProducts.keySet())
-        {
-            Product p = Get.getProduct(saleProducts.get(key));
-
-            p.removeStock(key);
-            Data.products.put(p.getCode(), p);
-
-            for (int i = 0; i < key; i++)
-            {
-                productsArray.add(p);
-            }
+            Create.createSale(clientId, productsArray);
+            System.out.println(Lang.saleCreated);
         }
-
-        Create.createSale(clientId, productsArray);
-        System.out.println(Lang.saleCreated);
+        Functions.pressAnyKeyToContinue();
     }
     public static boolean addMoreProducts()
     {
@@ -142,43 +159,116 @@ public class SalesMenu
     {
         Functions.prepareMenu(Lang.categoriesWithMostSalesMenu);
 
-        Map<String, Integer> salesList = new HashMap<>();
-        for (Sale s : Data.sales.values())
+        if (Data.sales.size() > 0)
         {
-            for (Product p : s.getProducts())
+            Map<String, Integer> salesList = new HashMap<>();
+            for (Sale s : Data.sales.values())
             {
-                if (!salesList.containsKey(p.getCategory()))
+                for (Product p : s.getProducts())
                 {
-                    salesList.put(p.getCategory(), 1);
+                    if (!salesList.containsKey(p.getCategory()))
+                    {
+                        salesList.put(p.getCategory(), 1);
+                    }
+                    else
+                    {
+                        int existingValue = salesList.get(p.getCategory());
+                        salesList.put(p.getCategory(), existingValue + 1);
+                    }
                 }
-                else
+            }
+
+            int mostSales = 0;
+            ArrayList<String> mostSoldCategories = new ArrayList<>();
+            for (String category : salesList.keySet())
+            {
+                int sales = salesList.get(category);
+                if (sales > mostSales)
                 {
-                    int existingValue = salesList.get(p.getCategory());
-                    salesList.put(p.getCategory(), existingValue + 1);
+                    mostSales = sales;
+                    mostSoldCategories.clear();
+                }
+                if (sales == mostSales)
+                {
+                    mostSoldCategories.add(category);
                 }
             }
-        }
 
-        int mostSales = 0;
-        ArrayList<String> mostSoldCategories = new ArrayList<>();
-        for (String category : salesList.keySet())
-        {
-            int sales = salesList.get(category);
-            if (sales > mostSales)
+            System.out.println(MessageFormat.format(Lang.mostSoldCategories, mostSales));
+            for (String category : mostSoldCategories)
             {
-                mostSales = sales;
-                mostSoldCategories.clear();
-            }
-            if (sales == mostSales)
-            {
-                mostSoldCategories.add(category);
+                System.out.println(" » " + category);
             }
         }
-
-        System.out.println(String.format(Lang.mostSoldCategories, mostSales));
-        for (String category : mostSoldCategories)
+        else
         {
-            System.out.println(" » " + category);
+            System.out.println(Lang.errorNoSalesFound);
         }
+        Functions.pressAnyKeyToContinue();
+    }
+    //      ██╗░░░██╗██╗███████╗░██╗░░░░░░░██╗  ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗  ██████╗░██╗░░░██╗██████╗░░█████╗░██╗░░██╗░█████╗░░██████╗███████╗░██████╗
+    //      ██║░░░██║██║██╔════╝░██║░░██╗░░██║  ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝  ██╔══██╗██║░░░██║██╔══██╗██╔══██╗██║░░██║██╔══██╗██╔════╝██╔════╝██╔════╝
+    //      ╚██╗░██╔╝██║█████╗░░░╚██╗████╗██╔╝  ██║░░╚═╝██║░░░░░██║█████╗░░██╔██╗██║░░░██║░░░  ██████╔╝██║░░░██║██████╔╝██║░░╚═╝███████║███████║╚█████╗░█████╗░░╚█████╗░
+    //      ░╚████╔╝░██║██╔══╝░░░░████╔═████║░  ██║░░██╗██║░░░░░██║██╔══╝░░██║╚████║░░░██║░░░  ██╔═══╝░██║░░░██║██╔══██╗██║░░██╗██╔══██║██╔══██║░╚═══██╗██╔══╝░░░╚═══██╗
+    //      ░░╚██╔╝░░██║███████╗░░╚██╔╝░╚██╔╝░  ╚█████╔╝███████╗██║███████╗██║░╚███║░░░██║░░░  ██║░░░░░╚██████╔╝██║░░██║╚█████╔╝██║░░██║██║░░██║██████╔╝███████╗██████╔╝
+    //      ░░░╚═╝░░░╚═╝╚══════╝░░░╚═╝░░░╚═╝░░  ░╚════╝░╚══════╝╚═╝╚══════╝╚═╝░░╚══╝░░░╚═╝░░░  ╚═╝░░░░░░╚═════╝░╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═════╝░╚══════╝╚═════╝░
+    public static void showViewClientPurchases()
+    {
+        Functions.prepareMenu(Lang.clientViewPurchasesMenu);
+
+        if (Data.clients.size() <= 0)
+        {
+            System.out.println(Lang.errorNoClientsFound);
+        }
+        else if (Data.sales.size() <= 0)
+        {
+            System.out.println(Lang.errorNoSalesFound);
+        }
+        else
+        {
+            int id = ReadClient.existingClientId();
+
+            ArrayList<Sale> sales = new ArrayList<>();
+            for (Sale sale : Data.sales.values())
+            {
+                if (sale.getClientId() == id)
+                {
+                    sales.add(sale);
+                }
+            }
+
+            if (sales.size() > 0)
+            {
+                for (Sale s : sales)
+                {
+                    System.out.println(MessageFormat.format(Lang.listProductsForSaleForClient, s.getId(), s.getClientId()));
+
+                    Map<Integer, Integer> productsMap = new HashMap<>();
+                    for (Product p : s.getProducts())
+                    {
+                        if (!productsMap.containsKey(p.getCode()))
+                        {
+                            productsMap.put(p.getCode(), 1);
+                        }
+                        else
+                        {
+                            int existingStock = productsMap.get(p.getCode());
+                            productsMap.put(p.getCode(), existingStock + 1);
+                        }
+                    }
+
+                    for (Integer key : productsMap.keySet())
+                    {
+                        Product p = Get.getProduct(key);
+                        System.out.println(MessageFormat.format(Lang.listedProductForSaleForClient, key, p.getName(), productsMap.get(key), p.getPrice() * key));
+                    }
+                }
+            }
+            else
+            {
+                System.out.println(Lang.errorClientHasNoSales);
+            }
+        }
+        Functions.pressAnyKeyToContinue();
     }
 }
