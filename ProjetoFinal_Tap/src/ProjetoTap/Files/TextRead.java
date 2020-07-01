@@ -23,7 +23,7 @@ public class TextRead
     //      ╚═╝░░░░░╚═╝░░╚═╝░╚════╝░╚═════╝░░╚═════╝░░╚════╝░░░░╚═╝░░░╚═════╝░
     public static int readProducts()
     {
-        if (Functions.doesFileExist(Settings.productsTextPath)) return -1;
+        if (!Functions.doesFileExist(Settings.productsTextPath)) return -1;
 
         int code;
         String name;
@@ -71,7 +71,7 @@ public class TextRead
     //      ░╚════╝░╚══════╝╚═╝╚══════╝╚═╝░░╚══╝░░░╚═╝░░░╚═════╝░
     public static int readClients()
     {
-        if (Functions.doesFileExist(Settings.clientsTextPath)) return -1;
+        if (!Functions.doesFileExist(Settings.clientsTextPath)) return -1;
 
         int id;
         String name;
@@ -121,7 +121,7 @@ public class TextRead
     //      ╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═════╝░
     public static int readSales()
     {
-        if (Functions.doesFileExist(Settings.salesTextPath)) return -1;
+        if (!Functions.doesFileExist(Settings.salesTextPath)) return -1;
 
         int id;
         int clientId;

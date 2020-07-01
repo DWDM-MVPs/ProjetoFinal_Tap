@@ -8,7 +8,7 @@ public class Settings
     //      ██╔══╝░░██║██║░░░░░██╔══╝░░░╚═══██╗
     //      ██║░░░░░██║███████╗███████╗██████╔╝
     //      ╚═╝░░░░░╚═╝╚══════╝╚══════╝╚═════╝░
-    public static String filesDirectory = "C:\\Milkenm\\Escola\\IPV\\GitHub DWDM\\ProjetoFinal_Tap\\ProjetoFinal_Tap\\data";
+    public static String filesDirectory = "data";
 
 
 

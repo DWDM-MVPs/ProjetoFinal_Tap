@@ -69,6 +69,7 @@ public class Lang
     public static String viewClientsByUpperAgeMenu = "Ver Clientes com Idade superior";
     public static String listOutOfStockMenu = "Produtos sem Stock";
     public static String clientsMenu = "Clientes";
+    public static String listClientsMenu = "Listar Clientes";
     public static String salesMenu = "Vendas";
     public static String makeSaleMenu = "Efetuar Venda";
     public static String createProductMenu = "Criar Produto";

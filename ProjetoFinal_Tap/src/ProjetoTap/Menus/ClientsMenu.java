@@ -44,8 +44,9 @@ public class ClientsMenu
             System.out.println(Lang.colorGreen + "8. " + Lang.mostMoneySpentMenu);
             System.out.println(Lang.colorGreen + "9. " + Lang.editClientMenu);
             System.out.println(Lang.colorGreen + "10. " + Lang.removeClientMenu);
+            System.out.println(Lang.colorGreen + "11. " + Lang.listClientsMenu);
 
-            option = readMenuOption(0, 10);
+            option = readMenuOption(0, 11);
             switch (option)
             {
                 case 1: // CREATE CLIENT
@@ -77,6 +78,9 @@ public class ClientsMenu
                     break;
                 case 10: // REMOVE CLIENT
                     showRemoveClient();
+                    break;
+                case 11: // LIST CLIENTS
+                    showListClients();
                     break;
             }
         } while (option != 0);
@@ -468,5 +472,27 @@ public class ClientsMenu
             System.out.println(Lang.errorNoClientsFound);
         }
         Functions.pressAnyKeyToContinue();
+    }
+    //      ██╗░░░░░██╗░██████╗████████╗  ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗░██████╗
+    //      ██║░░░░░██║██╔════╝╚══██╔══╝  ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝██╔════╝
+    //      ██║░░░░░██║╚█████╗░░░░██║░░░  ██║░░╚═╝██║░░░░░██║█████╗░░██╔██╗██║░░░██║░░░╚█████╗░
+    //      ██║░░░░░██║░╚═══██╗░░░██║░░░  ██║░░██╗██║░░░░░██║██╔══╝░░██║╚████║░░░██║░░░░╚═══██╗
+    //      ███████╗██║██████╔╝░░░██║░░░  ╚█████╔╝███████╗██║███████╗██║░╚███║░░░██║░░░██████╔╝
+    //      ╚══════╝╚═╝╚═════╝░░░░╚═╝░░░  ░╚════╝░╚══════╝╚═╝╚══════╝╚═╝░░╚══╝░░░╚═╝░░░╚═════╝░
+    public static void showListClients()
+    {
+        Functions.prepareMenu(Lang.listClientsMenu);
+
+        if (Data.clients.size() > 0)
+        {
+            for (Client c : Data.clients.values())
+            {
+                System.out.println(c.getId() + " - " + c.getName() + " - " + c.getCity() + " - " + c.getAge());
+            }
+        }
+        else
+        {
+            System.out.println(Lang.errorNoClientsFound);
+        }
     }
 }
