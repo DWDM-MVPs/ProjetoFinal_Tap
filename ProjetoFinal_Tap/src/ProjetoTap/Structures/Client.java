@@ -2,7 +2,9 @@ package ProjetoTap.Structures;
 
 import ProjetoTap.Functions;
 
-public class Client
+import java.io.Serializable;
+
+public class Client implements Serializable
 {
     private int id;
     private String name;

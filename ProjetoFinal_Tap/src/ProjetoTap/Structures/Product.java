@@ -1,6 +1,8 @@
 package ProjetoTap.Structures;
 
-public class Product
+import java.io.Serializable;
+
+public class Product implements Serializable
 {
     private int code;
     private String name;

@@ -28,27 +28,36 @@ public class Main
     {
         // READ
         // READ PRODUCTS
-        int readProducts = BinaryRead.readProducts();
-        if (readProducts == 0)
+        int readProducts1 = BinaryRead.readProducts();
+        int readProducts2 = 0;
+        if (readProducts1 == 0)
         {
-            TextRead.readProducts();
+            readProducts2  = TextRead.readProducts();
         }
         // READ CLIENTS
-        int readClients = BinaryRead.readClients();
-        if (readClients == 0)
+        int readClients1 = BinaryRead.readClients();
+        int readClients2 = 0;
+        if (readClients1 == 0)
         {
-            TextRead.readClients();
+            readClients2 = TextRead.readClients();
         }
         // READ SALES
-        int readSales = BinaryRead.readSales();
-        if (readSales == 0)
+        int readSales1 = BinaryRead.readSales();
+        int readSales2 = 0;
+        if (readSales1 == 0)
         {
-            TextRead.readSales();
+            readSales2 = TextRead.readSales();
         }
 
-        System.out.println(readProducts);
-        System.out.println(readClients);
-        System.out.println(readSales);
+        System.out.println("Products");
+        System.out.println(readProducts1);
+        System.out.println(readProducts2);
+        System.out.println("Clients");
+        System.out.println(readClients1);
+        System.out.println(readClients2);
+        System.out.println("Sales");
+        System.out.println(readSales1);
+        System.out.println(readSales2);
 
         // SHOW THE MAIN MENU
         showMainMenu();

@@ -41,6 +41,7 @@ public class BinaryRead
         }
         catch (Exception ignored)
         {
+            System.out.println(ignored.getCause());
             return -1;
         }
     }

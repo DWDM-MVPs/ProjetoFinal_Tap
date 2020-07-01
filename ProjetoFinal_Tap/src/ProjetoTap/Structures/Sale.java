@@ -1,8 +1,10 @@
 package ProjetoTap.Structures;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Sale {
+public class Sale implements Serializable
+{
     private int id;
     private int clientId;
     private ArrayList<Product> products;
