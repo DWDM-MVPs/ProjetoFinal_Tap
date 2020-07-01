@@ -107,7 +107,6 @@ public class TextRead
         }
         catch (Exception ignored)
         {
-            System.out.println(ignored.getMessage());
             return -1;
         }
 

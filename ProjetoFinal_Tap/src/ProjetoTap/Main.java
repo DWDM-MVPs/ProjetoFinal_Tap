@@ -10,6 +10,7 @@ import ProjetoTap.Files.TextSave;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.MessageFormat;
 import java.util.Scanner;
 
 import static ProjetoTap.Menus.ClientsMenu.showClientsMenu;
@@ -28,36 +29,39 @@ public class Main
     {
         // READ
         // READ PRODUCTS
-        int readProducts1 = BinaryRead.readProducts();
-        int readProducts2 = 0;
-        if (readProducts1 == 0)
+        int readProducts = BinaryRead.readProducts();
+        if (readProducts == 0)
         {
-            readProducts2  = TextRead.readProducts();
+            readProducts += TextRead.readProducts();
         }
         // READ CLIENTS
-        int readClients1 = BinaryRead.readClients();
-        int readClients2 = 0;
-        if (readClients1 == 0)
+        int readClients = BinaryRead.readClients();
+        if (readClients == 0)
         {
-            readClients2 = TextRead.readClients();
+            readClients += TextRead.readClients();
         }
         // READ SALES
-        int readSales1 = BinaryRead.readSales();
-        int readSales2 = 0;
-        if (readSales1 == 0)
+        int readSales = BinaryRead.readSales();
+        if (readSales == 0)
         {
-            readSales2 = TextRead.readSales();
+            readSales += TextRead.readSales();
         }
 
-        System.out.println("Products");
-        System.out.println(readProducts1);
-        System.out.println(readProducts2);
-        System.out.println("Clients");
-        System.out.println(readClients1);
-        System.out.println(readClients2);
-        System.out.println("Sales");
-        System.out.println(readSales1);
-        System.out.println(readSales2);
+        if (readProducts <= 0)
+        {
+            System.out.println(Lang.errorNoProductsFound);
+            Functions.pressAnyKeyToContinue();
+        }
+        if (readClients <= 0)
+        {
+            System.out.println(Lang.errorNoClientsFound);
+            Functions.pressAnyKeyToContinue();
+        }
+        if (readSales <= 0)
+        {
+            System.out.println(Lang.errorNoSalesFound);
+            Functions.pressAnyKeyToContinue();
+        }
 
         // SHOW THE MAIN MENU
         showMainMenu();
@@ -70,9 +74,11 @@ public class Main
         int savedClients = BinarySave.saveClients();
         // SAVE SALES
         int savesSales = BinarySave.saveSales();
-        System.out.println(savedProducts);
-        System.out.println(savedClients);
-        System.out.println(savesSales);
+
+        System.out.println(MessageFormat.format(Lang.savedProductsAmount, savedProducts));
+        System.out.println(MessageFormat.format(Lang.savedClientsAmount, savedClients));
+        System.out.println(MessageFormat.format(Lang.savedSalesAmount, savesSales));
+        Functions.pressAnyKeyToContinue();
     }
     //      ██████╗░███████╗░█████╗░██████╗░  ███╗░░░███╗███████╗███╗░░██╗██╗░░░██╗  ░█████╗░██████╗░████████╗██╗░█████╗░███╗░░██╗
     //      ██╔══██╗██╔════╝██╔══██╗██╔══██╗  ████╗░████║██╔════╝████╗░██║██║░░░██║  ██╔══██╗██╔══██╗╚══██╔══╝██║██╔══██╗████╗░██║

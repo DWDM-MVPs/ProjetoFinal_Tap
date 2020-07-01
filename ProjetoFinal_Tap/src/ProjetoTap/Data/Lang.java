@@ -131,6 +131,9 @@ public class Lang
     public static String listedClientMostMoneySpent = " » ID: {0} | Nome: {1} | Cidade: {2} | Idade: {3}";
     public static String confirmClientDelete = "Tem a certeza que pretende apagar o Cliente com ID '{0}'? Esta ação não pode ser revertida. (y/n):";
     public static String confirmProductDelete = "Tem a certeza que pretende apagar o Produto com Código '{0}'? Esta ação não pode ser revertida. (y/n):";
+    public static String savedProductsAmount = "Produtos guardados com sucesso: {0}";
+    public static String savedClientsAmount = "Clientes guardados com sucesso: {0}";
+    public static String savedSalesAmount = "Vendas guardadas com sucesso: {0}";
     //      ███████╗██████╗░██████╗░░█████╗░██████╗░  ██╗░░░░░░█████╗░███╗░░██╗░██████╗░
     //      ██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔══██╗  ██║░░░░░██╔══██╗████╗░██║██╔════╝░
     //      █████╗░░██████╔╝██████╔╝██║░░██║██████╔╝  ██║░░░░░███████║██╔██╗██║██║░░██╗░

@@ -33,7 +33,6 @@ public class BinaryRead
 
             map.forEach((key, p) ->
             {
-                System.out.println(key);
                 Data.products.put(key, p);
             });
 
@@ -41,7 +40,6 @@ public class BinaryRead
         }
         catch (Exception ignored)
         {
-            System.out.println(ignored.getCause());
             return -1;
         }
     }
