@@ -103,7 +103,7 @@ public class Lang
     public static String readClientCity = "Insira a Cidade do Cliente:";
     public static String readClientBirthYear = "Insira o Ano de Nascimento do Cliente:";
     public static String readWrongClientBirthYear = "O Ano de Nascimento inserido não é valido.";
-    public static String addMoreProducts = "vAdicionar mais produtos? (y/n):";
+    public static String addMoreProducts = "Adicionar mais produtos? (y/n):";
     //      ░██╗░░░░░░░██╗██╗████████╗██╗░░██╗  ██████╗░░█████╗░██████╗░░█████╗░███╗░░░███╗░██████╗
     //      ░██║░░██╗░░██║██║╚══██╔══╝██║░░██║  ██╔══██╗██╔══██╗██╔══██╗██╔══██╗████╗░████║██╔════╝
     //      ░╚██╗████╗██╔╝██║░░░██║░░░███████║  ██████╔╝███████║██████╔╝███████║██╔████╔██║╚█████╗░

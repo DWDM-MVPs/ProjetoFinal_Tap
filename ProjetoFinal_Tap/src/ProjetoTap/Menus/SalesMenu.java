@@ -93,7 +93,7 @@ public class SalesMenu
                     {
                         System.out.println(MessageFormat.format(Lang.outOfStock, Data.products.get(productCode).getName()));
                     }
-                    if (saleProducts.containsKey(productCode))
+                    if (!saleProducts.containsKey(productCode))
                     {
                         saleProducts.put(productCode, stock);
                     }
@@ -109,9 +109,9 @@ public class SalesMenu
             ArrayList<Product> productsArray = new ArrayList<>();
             for (int key : saleProducts.keySet())
             {
-                Product p = Get.getProduct(saleProducts.get(key));
+                Product p = Get.getProduct(key);
 
-                p.removeStock(key);
+                p.removeStock(saleProducts.get(key));
                 Data.products.put(p.getCode(), p);
 
                 for (int i = 0; i < key; i++)
