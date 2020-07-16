@@ -1,10 +1,10 @@
-package ProjetoTap.UserInput;
+package ProjetoTap.ReadInput;
 
 import ProjetoTap.Data.Data;
 import ProjetoTap.Data.Lang;
+import ProjetoTap.Functions;
 
 import static ProjetoTap.Functions.errorReset;
-import static ProjetoTap.Main.readString;
 import static ProjetoTap.Main.sc;
 
 public class ReadProduct
@@ -15,9 +15,9 @@ public class ReadProduct
     //      ██╔═══╝░██╔══██╗██║░░██║██║░░██║██║░░░██║██║░░██╗░░░██║░░░  ██║░░██╗██║░░██║██║░░██║██╔══╝░░
     //      ██║░░░░░██║░░██║╚█████╔╝██████╔╝╚██████╔╝╚█████╔╝░░░██║░░░  ╚█████╔╝╚█████╔╝██████╔╝███████╗
     //      ╚═╝░░░░░╚═╝░░╚═╝░╚════╝░╚═════╝░░╚═════╝░░╚════╝░░░░╚═╝░░░  ░╚════╝░░╚════╝░╚═════╝░╚══════╝
-    public static int productCode(boolean canAlreadyExist)
+    public static int productCode(boolean canAlreadyExist, String readMessage)
     {
-        System.out.println(Lang.readProductCode);
+        System.out.println(readMessage);
         try
         {
             int code = sc.nextInt();
@@ -25,14 +25,14 @@ public class ReadProduct
             if (!canAlreadyExist && Data.products.containsKey(code))
             {
                 errorReset(Lang.readWrongProductCode);
-                return productCode(false);
+                return productCode(false, readMessage);
             }
             return code;
         }
         catch (Exception ignored)
         {
             errorReset(Lang.errorWrongDataType);
-            return productCode(canAlreadyExist);
+            return productCode(canAlreadyExist, readMessage);
         }
     }
     //      ██████╗░██████╗░░█████╗░██████╗░██╗░░░██╗░█████╗░████████╗  ███╗░░██╗░█████╗░███╗░░░███╗███████╗
@@ -46,7 +46,7 @@ public class ReadProduct
         System.out.println(Lang.readProductName);
         try
         {
-            return readString();
+            return Functions.readString();
         }
         catch (Exception ignored)
         {
@@ -65,7 +65,7 @@ public class ReadProduct
         System.out.println(Lang.readProductCategory);
         try
         {
-            return readString();
+            return Functions.readString();
         }
         catch (Exception ignored)
         {
@@ -140,10 +140,9 @@ public class ReadProduct
     //      ╚══════╝╚═╝░░╚═╝╚═╝╚═════╝░░░░╚═╝░░░╚═╝╚═╝░░╚══╝░╚═════╝░  ╚═╝░░░░░╚═╝░░╚═╝░╚════╝░╚═════╝░░╚═════╝░░╚════╝░░░░╚═╝░░░  ░╚════╝░░╚════╝░╚═════╝░╚══════╝
     public static int existingProductCode()
     {
-        System.out.println(Lang.existingProductCode);
         try
         {
-            int code = productCode(true);
+            int code = productCode(true, Lang.readExistingProductCode);
 
             if (Data.products.containsKey(code))
             {

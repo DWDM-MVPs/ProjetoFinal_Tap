@@ -1,17 +1,18 @@
 package ProjetoTap.Files;
 
+import ProjetoTap.Data.Data;
+import ProjetoTap.Data.Settings;
+import ProjetoTap.Functions;
 import ProjetoTap.StructureActions.Create;
 import ProjetoTap.StructureActions.Get;
-import ProjetoTap.Data.Data;
-import ProjetoTap.Functions;
-import ProjetoTap.Data.Settings;
 import ProjetoTap.Structures.Client;
 import ProjetoTap.Structures.Product;
 import ProjetoTap.Structures.Sale;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TextRead
 {
@@ -38,22 +39,29 @@ public class TextRead
         {
             BufferedReader bf = new BufferedReader(new FileReader(Settings.productsTextPath));
 
-            while ((line = bf.readLine()) != null)
+            if ((line = bf.readLine()) != null)
             {
-                String[] splitLine = line.split("\t");
-
-                try
+                while ((line = bf.readLine()) != null)
                 {
-                    code = Integer.parseInt(splitLine[0]);
-                    name = splitLine[1];
-                    category = splitLine[2];
-                    stock = Integer.parseInt(splitLine[3]);
-                    price = Double.parseDouble(splitLine[4]);
+                    String[] splitLine = line.split("\t");
 
-                    Create.createProduct(code, name, category, stock, price, true);
-                    successfulReadings++;
+                    try
+                    {
+                        code = Integer.parseInt(splitLine[0]);
+                        name = splitLine[1];
+                        category = splitLine[2];
+                        stock = Integer.parseInt(splitLine[3]);
+                        price = Double.parseDouble(splitLine[4]);
+
+                        Create.createProduct(code, name, category, stock, price, true);
+                        successfulReadings++;
+                    }
+                    catch (Exception ignored) { }
                 }
-                catch (Exception ignored) { }
+            }
+            else
+            {
+                return -1;
             }
         }
         catch (Exception ex)
@@ -85,24 +93,31 @@ public class TextRead
         {
             BufferedReader bf = new BufferedReader(new FileReader(Settings.clientsTextPath));
 
-            while ((line = bf.readLine()) != null)
+            if ((line = bf.readLine()) != null)
             {
-                String[] splitLine = line.split("\t");
-
-                try
+                while ((line = bf.readLine()) != null)
                 {
-                    id = Integer.parseInt(splitLine[0]);
-                    name = splitLine[1];
-                    city = splitLine[2];
-                    birthYear = Integer.parseInt(splitLine[3]);
+                    String[] splitLine = line.split("\t");
 
-                    Client c = new Client(id, name, city, birthYear);
+                    try
+                    {
+                        id = Integer.parseInt(splitLine[0]);
+                        name = splitLine[1];
+                        city = splitLine[2];
+                        birthYear = Integer.parseInt(splitLine[3]);
 
-                    Data.clients.put(id, c);
+                        Client c = new Client(id, name, city, birthYear);
 
-                    successfulReadings++;
+                        Data.clients.put(id, c);
+
+                        successfulReadings++;
+                    }
+                    catch (Exception ignored) { }
                 }
-                catch (Exception ignored) { }
+            }
+            else
+            {
+                return -1;
             }
         }
         catch (Exception ignored)
@@ -120,64 +135,81 @@ public class TextRead
     //      ╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═════╝░
     public static int readSales()
     {
-        if (!Functions.doesFileExist(Settings.salesTextPath)) return -1;
+        // <SALE ID> \t <TOTAL PRICE> \t <PRODUCT ID> \t <AMOUNT>
+        if (!Functions.doesFileExist(Settings.salesTextPath) || true) return -1;
 
-        int id;
-        int clientId;
-        ArrayList<Product> products = new ArrayList<>();
-
-        String line;
         int successfulReadings = 0;
 
         try
         {
             BufferedReader bf = new BufferedReader(new FileReader(Settings.salesTextPath));
 
-            while ((line = bf.readLine()) != null)
+            String line;
+
+            if ((line = bf.readLine()) != null)
             {
-                String[] splitLine = line.split("\t");
-
-                try
+                while ((line = bf.readLine()) != null)
                 {
-                    id = Integer.parseInt(splitLine[0]);
-                    clientId = Integer.parseInt(splitLine[1]);
+                    String[] splitLine = line.split("\t");
 
-                    String[] productsSplit = splitLine[2].split("\t");
-                    if (productsSplit.length > 0)
+                    try
                     {
-                        int productCode;
-                        String productName;
-                        String productCategory;
-                        int productStock;
-                        double productPrice;
+                        int saleId = Integer.parseInt(splitLine[0]);
+                        double totalPrice = Double.parseDouble(splitLine[1]);
 
-                        for (String productString : productsSplit)
+                        Map<Integer, Integer> products = new HashMap<>(); // <PRODUCT CODE>, <AMOUNT>
+
+                        String[] productsSplit = splitLine[2].split("\t");
+                        if (productsSplit.length > 0)
                         {
-                            String[] productStringSplit = productString.split(",");
+                            // STORE PRODUCT INFO
+                            int productCode;
+                            String productName;
+                            String productCategory;
+                            int productStock;
+                            double productPrice;
 
-                            productCode = Integer.parseInt(productStringSplit[0]);
-                            productName = productStringSplit[1];
-                            productCategory = productStringSplit[2];
-                            productStock = Integer.parseInt(productStringSplit[3]);
-                            productPrice = Double.parseDouble(productStringSplit[4]);
+                            // READ EVERY PRODUCT
+                            for (String productString : productsSplit)
+                            {
+                                String[] productStringSplit = productString.split(",");
 
-                            Product p = new Product(productCode, productName, productCategory, productStock, productPrice);
-                            Create.createProduct(p, false);
-                            products.add(p);
+                                productCode = Integer.parseInt(productStringSplit[0]);
+                                productName = productStringSplit[1];
+                                productCategory = productStringSplit[2];
+                                productStock = Integer.parseInt(productStringSplit[3]);
+                                productPrice = Double.parseDouble(productStringSplit[4]);
+
+                                Product p = new Product(productCode, productName, productCategory, productStock, productPrice);
+                                Create.createProduct(p, false);
+
+                                if (!products.containsKey(p.getCode()))
+                                {
+                                    products.put(p.getCode(), 1);
+                                }
+                                else
+                                {
+                                    int existingAmount = products.get(p.getCode());
+                                    products.put(p.getCode(), existingAmount + 1);
+                                }
+                            }
                         }
+
+                        Sale s = new Sale(saleId, products);
+                        if (Get.getSale(s.getId()) != null)
+                        {
+                            s.setId(Functions.generateId(Data.sales));
+                        }
+                        Data.sales.put(s.getId(), s);
+
+                        successfulReadings++;
                     }
-
-
-                    Sale s = new Sale(id, clientId, products);
-                    if (Get.getSale(s.getId()) != null)
-                    {
-                        s.setId(Functions.generateId(Data.sales));
-                    }
-                    Data.sales.put(s.getId(), s);
-
-                    successfulReadings++;
+                    catch (Exception ignored) { }
                 }
-                catch (Exception ignored) { }
+            }
+            else
+            {
+                return -1;
             }
         }
         catch (Exception ignored)

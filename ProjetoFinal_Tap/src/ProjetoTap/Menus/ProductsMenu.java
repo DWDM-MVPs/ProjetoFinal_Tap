@@ -1,20 +1,18 @@
 package ProjetoTap.Menus;
 
-import ProjetoTap.StructureActions.Create;
 import ProjetoTap.Data.Data;
-import ProjetoTap.Functions;
 import ProjetoTap.Data.Lang;
+import ProjetoTap.Functions;
+import ProjetoTap.ReadInput.ReadProduct;
+import ProjetoTap.StructureActions.Create;
 import ProjetoTap.StructureActions.Get;
-import ProjetoTap.Structures.Sale;
-import ProjetoTap.UserInput.ReadProduct;
 import ProjetoTap.Structures.Product;
+import ProjetoTap.Structures.Sale;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static ProjetoTap.Main.readMenuOption;
 
 public class ProductsMenu
 {
@@ -29,23 +27,23 @@ public class ProductsMenu
         int option;
         do
         {
-            Functions.prepareMenu(Lang.colorYellow + Lang.productsMenu);
+            ArrayList<String> options = new ArrayList<String>()
+            {{
+                add(Lang.listProducts);
+                add(Lang.createProductMenu);
+                add(Lang.categoriesSizeMenu);
+                add(Lang.listOutOfStockMenu);
+                add(Lang.viewIfExistsByCodeMenu);
+                add(Lang.averagePricePerCategoryMenu);
+                add(Lang.addStockMenu);
+                add(Lang.editProductMenu);
+                add(Lang.removeProductMenu);
+                add(Lang.removeStockMenu);
+                add(Lang.mostExpensiveProductMenu);
+                add(Lang.mostSoldProductsMenu);
+            }};
 
-            System.out.println(Lang.colorYellow + "0. " + Lang.exit);
-            System.out.println(Lang.colorGreen + "1. " + Lang.listProducts);
-            System.out.println(Lang.colorGreen + "2. " + Lang.createProductMenu);
-            System.out.println(Lang.colorGreen + "3. " + Lang.categoriesSizeMenu);
-            System.out.println(Lang.colorGreen + "4. " + Lang.listOutOfStockMenu);
-            System.out.println(Lang.colorGreen + "5. " + Lang.viewIfExistsByCodeMenu);
-            System.out.println(Lang.colorGreen + "6. " + Lang.averagePricePerCategoryMenu);
-            System.out.println(Lang.colorGreen + "7. " + Lang.addStockMenu);
-            System.out.println(Lang.colorGreen + "8. " + Lang.editProductMenu);
-            System.out.println(Lang.colorGreen + "9. " + Lang.removeProductMenu);
-            System.out.println(Lang.colorGreen + "10. " + Lang.removeStockMenu);
-            System.out.println(Lang.colorGreen + "11. " + Lang.mostExpensiveProductMenu);
-            System.out.println(Lang.colorGreen + "12. " + Lang.mostSoldProducts);
-
-            option = readMenuOption(0, 12);
+            option = Functions.printMenu(Lang.productsMenu, options, true);
             switch (option)
             {
                 case 1: // LIST PRODUCTS
@@ -132,9 +130,9 @@ public class ProductsMenu
         }
         else
         {
-            System.out.println(Lang.errorNoProductsFound);
+            System.out.println(Lang.errorLoadingProducts);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ░█████╗░██████╗░███████╗░█████╗░████████╗███████╗  ██████╗░██████╗░░█████╗░██████╗░██╗░░░██╗░█████╗░████████╗
     //      ██╔══██╗██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██╔════╝  ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║░░░██║██╔══██╗╚══██╔══╝
@@ -146,7 +144,7 @@ public class ProductsMenu
     {
         Functions.prepareMenu(Lang.createProductMenu);
 
-        int code = ReadProduct.productCode(false);
+        int code = ReadProduct.productCode(false, Lang.readProductCode);
         String name = ReadProduct.productName();
         String category = ReadProduct.productCategory();
         int stock = ReadProduct.productStock(false);
@@ -162,7 +160,7 @@ public class ProductsMenu
         {
             System.out.println(Lang.productCreatedSuccessfully);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ░█████╗░░█████╗░████████╗███████╗░██████╗░░█████╗░██████╗░██╗███████╗░██████╗  ░██████╗██╗███████╗███████╗
     //      ██╔══██╗██╔══██╗╚══██╔══╝██╔════╝██╔════╝░██╔══██╗██╔══██╗██║██╔════╝██╔════╝  ██╔════╝██║╚════██║██╔════╝
@@ -205,9 +203,9 @@ public class ProductsMenu
         }
         else
         {
-            System.out.println(Lang.errorNoProductsFound);
+            System.out.println(Lang.errorLoadingProducts);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ██╗░░░░░██╗░██████╗████████╗  ░█████╗░██╗░░░██╗████████╗  ░█████╗░███████╗  ░██████╗████████╗░█████╗░░█████╗░██╗░░██╗
     //      ██║░░░░░██║██╔════╝╚══██╔══╝  ██╔══██╗██║░░░██║╚══██╔══╝  ██╔══██╗██╔════╝  ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║░██╔╝
@@ -248,9 +246,9 @@ public class ProductsMenu
         }
         else
         {
-            System.out.println(Lang.errorNoProductsFound);
+            System.out.println(Lang.errorLoadingProducts);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ██╗░░░██╗██╗███████╗░██╗░░░░░░░██╗  ██╗███████╗  ██████╗░██████╗░░█████╗░██████╗░██╗░░░██╗░█████╗░████████╗  ███████╗██╗░░██╗██╗░██████╗████████╗░██████╗  ██████╗░██╗░░░██╗  ░█████╗░░█████╗░██████╗░███████╗
     //      ██║░░░██║██║██╔════╝░██║░░██╗░░██║  ██║██╔════╝  ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║░░░██║██╔══██╗╚══██╔══╝  ██╔════╝╚██╗██╔╝██║██╔════╝╚══██╔══╝██╔════╝  ██╔══██╗╚██╗░██╔╝  ██╔══██╗██╔══██╗██╔══██╗██╔════╝
@@ -264,7 +262,7 @@ public class ProductsMenu
 
         if (Data.products.size() > 0)
         {
-            int code = ReadProduct.productCode(true);
+            int code = ReadProduct.productCode(true, Lang.readExistingProductCode);
 
             if (Data.products.containsKey(code))
             {
@@ -278,9 +276,9 @@ public class ProductsMenu
         }
         else
         {
-            System.out.println(Lang.errorNoProductsFound);
+            System.out.println(Lang.errorLoadingProducts);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ░█████╗░██╗░░░██╗███████╗██████╗░░█████╗░░██████╗░███████╗  ██████╗░██████╗░██╗░█████╗░███████╗  ██████╗░███████╗██████╗░  ░█████╗░░█████╗░████████╗███████╗░██████╗░░█████╗░██████╗░██╗░░░██╗
     //      ██╔══██╗██║░░░██║██╔════╝██╔══██╗██╔══██╗██╔════╝░██╔════╝  ██╔══██╗██╔══██╗██║██╔══██╗██╔════╝  ██╔══██╗██╔════╝██╔══██╗  ██╔══██╗██╔══██╗╚══██╔══╝██╔════╝██╔════╝░██╔══██╗██╔══██╗╚██╗░██╔╝
@@ -320,7 +318,7 @@ public class ProductsMenu
                 System.out.println(" » " + category + " - " + averagePrice + " €");
             }
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ░█████╗░██████╗░██████╗░  ░██████╗████████╗░█████╗░░█████╗░██╗░░██╗
     //      ██╔══██╗██╔══██╗██╔══██╗  ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║░██╔╝
@@ -344,9 +342,9 @@ public class ProductsMenu
         }
         else
         {
-            System.out.println(Lang.errorNoProductsFound);
+            System.out.println(Lang.errorLoadingProducts);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ███████╗██████╗░██╗████████╗  ██████╗░██████╗░░█████╗░██████╗░██╗░░░██╗░█████╗░████████╗
     //      ██╔════╝██╔══██╗██║╚══██╔══╝  ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║░░░██║██╔══██╗╚══██╔══╝
@@ -395,9 +393,9 @@ public class ProductsMenu
         }
         else
         {
-            System.out.println(Lang.errorNoProductsFound);
+            System.out.println(Lang.errorLoadingProducts);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ██████╗░███████╗███╗░░░███╗░█████╗░██╗░░░██╗███████╗  ██████╗░██████╗░░█████╗░██████╗░██╗░░░██╗░█████╗░████████╗
     //      ██╔══██╗██╔════╝████╗░████║██╔══██╗██║░░░██║██╔════╝  ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║░░░██║██╔══██╗╚══██╔══╝
@@ -423,9 +421,9 @@ public class ProductsMenu
         }
         else
         {
-            System.out.println(Lang.errorNoProductsFound);
+            System.out.println(Lang.errorLoadingProducts);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ██████╗░███████╗███╗░░░███╗░█████╗░██╗░░░██╗███████╗  ░██████╗████████╗░█████╗░░█████╗░██╗░░██╗
     //      ██╔══██╗██╔════╝████╗░████║██╔══██╗██║░░░██║██╔════╝  ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║░██╔╝
@@ -458,9 +456,9 @@ public class ProductsMenu
         }
         else
         {
-            System.out.println(Lang.errorNoProductsFound);
+            System.out.println(Lang.errorLoadingProducts);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ███╗░░░███╗░█████╗░░██████╗████████╗  ███████╗██╗░░██╗██████╗░███████╗███╗░░██╗░██████╗██╗██╗░░░██╗███████╗  ██████╗░██████╗░░█████╗░██████╗░██╗░░░██╗░█████╗░████████╗
     //      ████╗░████║██╔══██╗██╔════╝╚══██╔══╝  ██╔════╝╚██╗██╔╝██╔══██╗██╔════╝████╗░██║██╔════╝██║██║░░░██║██╔════╝  ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║░░░██║██╔══██╗╚══██╔══╝
@@ -497,9 +495,9 @@ public class ProductsMenu
         }
         else
         {
-            System.out.println(Lang.errorNoProductsFound);
+            System.out.println(Lang.errorLoadingProducts);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ███╗░░░███╗░█████╗░░██████╗████████╗  ░██████╗░█████╗░██╗░░░░░██████╗░  ██████╗░██████╗░░█████╗░██████╗░██╗░░░██╗░█████╗░████████╗░██████╗
     //      ████╗░████║██╔══██╗██╔════╝╚══██╔══╝  ██╔════╝██╔══██╗██║░░░░░██╔══██╗  ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║░░░██║██╔══██╗╚══██╔══╝██╔════╝
@@ -516,8 +514,10 @@ public class ProductsMenu
             Map<Integer, Integer> productSales = new HashMap<>();
             for (Sale s : Data.sales.values())
             {
-                for (Product p : s.getProducts())
+                for (int code : s.getSaleProducts().keySet())
                 {
+                    Product p = Get.getProduct(code);
+
                     if (!productSales.containsKey(p.getCode()))
                     {
                         productSales.put(p.getCode(), 1);
@@ -555,8 +555,8 @@ public class ProductsMenu
         }
         else
         {
-            System.out.println(Lang.errorNoSalesFound);
+            System.out.println(Lang.errorLoadingSales);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
 }

@@ -2,7 +2,7 @@ package ProjetoTap.Files;
 
 import ProjetoTap.Data.Data;
 import ProjetoTap.Data.Settings;
-import ProjetoTap.Structures.Product;
+import ProjetoTap.StructureActions.Get;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -18,6 +18,7 @@ public class TextSave
         {
             PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(Settings.productsTextPath)));
 
+            writer.println("PRODUCTS BACKUP");
             Data.products.forEach((key, p) ->
             {
                 writer.println(p.getCode() + "\t" + p.getName() + "\t" + p.getCategory() + "\t" + p.getStock() + "\t" + p.getPrice());
@@ -46,6 +47,7 @@ public class TextSave
         {
             PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(Settings.clientsTextPath)));
 
+            writer.println("CLIENTS BACKUP");
             Data.clients.forEach((key, c) ->
             {
                 writer.println(c.getId() + "\t" + c.getName() + "\t" + c.getCity() + "\t" + c.getBirthYear());
@@ -74,23 +76,26 @@ public class TextSave
         {
             PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(Settings.salesTextPath)));
 
+            writer.println("SALES BACKUP");
             Data.sales.forEach((key, s) ->
             {
                 StringBuilder productsString = new StringBuilder();
 
                 boolean addTab = false;
-                for (Product p : s.getProducts())
+                for (int code : s.getSaleProducts().keySet())
                 {
+                    int stock = Get.getProduct(code).getStock();
+
                     if (addTab)
                     {
                         addTab = false;
                         productsString.append("\t");
                     }
-                    productsString.append(p.getCode());
+                    productsString.append(code + "|" + stock);
                     addTab = true;
                 }
 
-                writer.println(s.getId() + "\t" + s.getClientId() + productsString);
+                writer.println(s.getId() + "\t" + productsString);
             });
 
             writer.close();

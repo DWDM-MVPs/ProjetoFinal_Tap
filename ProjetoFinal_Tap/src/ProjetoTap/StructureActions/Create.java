@@ -7,7 +7,7 @@ import ProjetoTap.Structures.Client;
 import ProjetoTap.Structures.Product;
 import ProjetoTap.Structures.Sale;
 
-import java.util.ArrayList;
+import java.util.Map;
 
 public class Create
 {
@@ -70,12 +70,16 @@ public class Create
     //      ░╚═══██╗██╔══██║██║░░░░░██╔══╝░░░╚═══██╗
     //      ██████╔╝██║░░██║███████╗███████╗██████╔╝
     //      ╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═════╝░
-    public static Sale createSale(int clientId, ArrayList<Product> products)
+    public static Sale createSale(int clientId, Map<Integer, Integer> products)
     {
+        // NOTE: PRODUCT STOCK IS ALREADY BEING REMOVED WHEN THE SALE IS CREATED
+
         int saleId = Functions.generateId(Data.sales);
 
-        Sale s = new Sale(saleId, clientId, products);
+        Sale s = new Sale(saleId, products);
+
         Data.sales.put(saleId, s);
+        Data.clients.get(clientId).addSale(saleId);
 
         return s;
     }

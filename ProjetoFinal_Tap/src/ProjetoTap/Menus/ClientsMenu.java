@@ -1,22 +1,20 @@
 package ProjetoTap.Menus;
 
-import ProjetoTap.Data.Settings;
-import ProjetoTap.StructureActions.Create;
 import ProjetoTap.Data.Data;
-import ProjetoTap.Functions;
 import ProjetoTap.Data.Lang;
+import ProjetoTap.Data.Settings;
+import ProjetoTap.Functions;
+import ProjetoTap.ReadInput.ReadClient;
+import ProjetoTap.StructureActions.Create;
 import ProjetoTap.StructureActions.Get;
-import ProjetoTap.Structures.Product;
-import ProjetoTap.UserInput.ReadClient;
 import ProjetoTap.Structures.Client;
-import ProjetoTap.Structures.Sale;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static ProjetoTap.Main.*;
+import static ProjetoTap.Main.sc;
 
 public class ClientsMenu
 {
@@ -31,22 +29,22 @@ public class ClientsMenu
         int option;
         do
         {
-            Functions.prepareMenu(Lang.colorYellow + Lang.clientsMenu);
+            ArrayList<String> options = new ArrayList<String>()
+            {{
+                add(Lang.createClientMenu);
+                add(Lang.oldestClientMenu);
+                add(Lang.averageClientAgeMenu);
+                add(Lang.viewClientsByUpperAgeMenu);
+                add(Lang.viewClientsByCityMenu);
+                add(Lang.viewIfExistsByNameMenu);
+                add(Lang.viewAgeModeMenu);
+                add(Lang.mostMoneySpentMenu);
+                add(Lang.editClientMenu);
+                add(Lang.removeClientMenu);
+                add(Lang.listClientsMenu);
+            }};
 
-            System.out.println(Lang.colorYellow + "0. " + Lang.exit);
-            System.out.println(Lang.colorGreen + "1. " + Lang.createClientMenu);
-            System.out.println(Lang.colorGreen + "2. " + Lang.oldestClientMenu);
-            System.out.println(Lang.colorGreen + "3. " + Lang.averageClientAgeMenu);
-            System.out.println(Lang.colorGreen + "4. " + Lang.viewClientsByUpperAgeMenu);
-            System.out.println(Lang.colorGreen + "5. " + Lang.viewClientsByCityMenu);
-            System.out.println(Lang.colorGreen + "6. " + Lang.viewIfExistsByName);
-            System.out.println(Lang.colorGreen + "7. " + Lang.viewAgeModeMenu);
-            System.out.println(Lang.colorGreen + "8. " + Lang.mostMoneySpentMenu);
-            System.out.println(Lang.colorGreen + "9. " + Lang.editClientMenu);
-            System.out.println(Lang.colorGreen + "10. " + Lang.removeClientMenu);
-            System.out.println(Lang.colorGreen + "11. " + Lang.listClientsMenu);
-
-            option = readMenuOption(0, 11);
+            option = Functions.printMenu(Lang.clientsMenu, options, true);
             switch (option)
             {
                 case 1: // CREATE CLIENT
@@ -95,7 +93,7 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.createProductMenu);
 
-        int id = ReadClient.clientId(false);
+        int id = ReadClient.clientId(false, Lang.readExistingClientId);
         String name = ReadClient.clientName();
         String city = ReadClient.clientCity();
         int birthYear = ReadClient.clientBirthYear();
@@ -110,7 +108,7 @@ public class ClientsMenu
         {
             System.out.println(Lang.clientCreatedSuccessfully);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ░█████╗░██╗░░░░░██████╗░███████╗░██████╗████████╗  ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗
     //      ██╔══██╗██║░░░░░██╔══██╗██╔════╝██╔════╝╚══██╔══╝  ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝
@@ -138,9 +136,9 @@ public class ClientsMenu
         }
         else
         {
-            System.out.println(Lang.errorNoClientsFound);
+            System.out.println(Lang.errorLoadingClients);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ░█████╗░██╗░░░██╗███████╗██████╗░░█████╗░░██████╗░███████╗  ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗  ░█████╗░░██████╗░███████╗
     //      ██╔══██╗██║░░░██║██╔════╝██╔══██╗██╔══██╗██╔════╝░██╔════╝  ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝  ██╔══██╗██╔════╝░██╔════╝
@@ -167,9 +165,9 @@ public class ClientsMenu
         }
         else
         {
-            System.out.println(Lang.errorNoClientsFound);
+            System.out.println(Lang.errorLoadingClients);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ██╗░░░██╗██╗███████╗░██╗░░░░░░░██╗  ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗░██████╗  ██████╗░██╗░░░██╗  ██╗░░░██╗██████╗░██████╗░███████╗██████╗░  ░█████╗░░██████╗░███████╗
     //      ██║░░░██║██║██╔════╝░██║░░██╗░░██║  ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝██╔════╝  ██╔══██╗╚██╗░██╔╝  ██║░░░██║██╔══██╗██╔══██╗██╔════╝██╔══██╗  ██╔══██╗██╔════╝░██╔════╝
@@ -196,9 +194,9 @@ public class ClientsMenu
         }
         else
         {
-            System.out.println(Lang.errorNoClientsFound);
+            System.out.println(Lang.errorLoadingClients);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     public static int readAge()
     {
@@ -255,14 +253,14 @@ public class ClientsMenu
             }
             else
             {
-                System.out.println(Lang.errorNoClientsFound);
+                System.out.println(Lang.errorLoadingClients);
             }
         }
         else
         {
-            System.out.println(Lang.errorNoClientsFound);
+            System.out.println(Lang.errorLoadingClients);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ██╗░░░██╗██╗███████╗░██╗░░░░░░░██╗  ██╗███████╗  ███████╗██╗░░██╗██╗░██████╗████████╗░██████╗  ██████╗░██╗░░░██╗  ███╗░░██╗░█████╗░███╗░░░███╗███████╗
     //      ██║░░░██║██║██╔════╝░██║░░██╗░░██║  ██║██╔════╝  ██╔════╝╚██╗██╔╝██║██╔════╝╚══██╔══╝██╔════╝  ██╔══██╗╚██╗░██╔╝  ████╗░██║██╔══██╗████╗░████║██╔════╝
@@ -272,7 +270,7 @@ public class ClientsMenu
     //      ░░░╚═╝░░░╚═╝╚══════╝░░░╚═╝░░░╚═╝░░  ╚═╝╚═╝░░░░░  ╚══════╝╚═╝░░╚═╝╚═╝╚═════╝░░░░╚═╝░░░╚═════╝░  ╚═════╝░░░░╚═╝░░░  ╚═╝░░╚══╝╚═╝░░╚═╝╚═╝░░░░░╚═╝╚══════╝
     public static void showViewIfExistsByName()
     {
-        Functions.prepareMenu(Lang.viewIfExistsByCodeMenu);
+        Functions.prepareMenu(Lang.viewIfExistsByNameMenu);
 
         if (Data.clients.size() > 0)
         {
@@ -297,14 +295,14 @@ public class ClientsMenu
             }
             else
             {
-                System.out.println(Lang.errorNoClientsFound);
+                System.out.println(Lang.errorLoadingClients);
             }
         }
         else
         {
-            System.out.println(Lang.errorNoClientsFound);
+            System.out.println(Lang.errorLoadingClients);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ██╗░░░██╗██╗███████╗░██╗░░░░░░░██╗  ░█████╗░░██████╗░███████╗  ███╗░░░███╗░█████╗░██████╗░███████╗
     //      ██║░░░██║██║██╔════╝░██║░░██╗░░██║  ██╔══██╗██╔════╝░██╔════╝  ████╗░████║██╔══██╗██╔══██╗██╔════╝
@@ -352,9 +350,9 @@ public class ClientsMenu
         }
         else
         {
-            System.out.println(Lang.errorNoClientsFound);
+            System.out.println(Lang.errorLoadingClients);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ███╗░░░███╗░█████╗░░██████╗████████╗  ███╗░░░███╗░█████╗░███╗░░██╗███████╗██╗░░░██╗  ░██████╗██████╗░███████╗███╗░░██╗████████╗
     //      ████╗░████║██╔══██╗██╔════╝╚══██╔══╝  ████╗░████║██╔══██╗████╗░██║██╔════╝╚██╗░██╔╝  ██╔════╝██╔══██╗██╔════╝████╗░██║╚══██╔══╝
@@ -366,38 +364,30 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.mostMoneySpentMenu);
 
-        if (Data.clients.size() > 0)
+        if (Data.clients.size() == 0)
         {
-            double mostMoneySpent = 0;
-            Map<Integer, Double> clients = new HashMap<>();
-            for (Sale s : Data.sales.values())
-            {
-                for (Product p : s.getProducts())
-                {
-                    if (!clients.containsKey(s.getClientId()))
-                    {
-                        clients.put(s.getClientId(), p.getPrice());
-                    }
-                    else
-                    {
-                        double existingValue = clients.get(s.getClientId());
-                        clients.put(s.getClientId(), existingValue + p.getPrice());
-                    }
-                }
-            }
-
-            System.out.println(MessageFormat.format(Lang.listClientMostMoneySpent, mostMoneySpent));
-            for (Integer id : clients.keySet())
-            {
-                Client c = Get.getClient(id);
-                System.out.println(MessageFormat.format(Lang.listedClientMostMoneySpent, id, c.getName(), c.getCity(), c.getAge()));
-            }
+            System.out.println(Lang.errorLoadingClients);
+        }
+        else if (Data.sales.size() == 0)
+        {
+            System.out.println(Lang.errorLoadingSales);
         }
         else
         {
-            System.out.println(Lang.errorNoSalesFound);
+            Client mostMoneySpentClient = null;
+
+            for (Client c : Data.clients.values())
+            {
+                if (mostMoneySpentClient == null || c.getTotalMoneySpent() > mostMoneySpentClient.getTotalMoneySpent())
+                {
+                    mostMoneySpentClient = c;
+                }
+            }
+
+            System.out.println(MessageFormat.format(Lang.listClientMostMoneySpent, mostMoneySpentClient.getTotalMoneySpent(), mostMoneySpentClient.getName(), mostMoneySpentClient.getId(), mostMoneySpentClient.getCity(), mostMoneySpentClient.getAge())); // AMOUNT - NAME - ID - CITY - AGE
         }
-        Functions.pressAnyKeyToContinue();
+
+        Functions.pressEnterToContinue();
     }
     //      ███████╗██████╗░██╗████████╗  ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗
     //      ██╔════╝██╔══██╗██║╚══██╔══╝  ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝
@@ -441,9 +431,9 @@ public class ClientsMenu
         }
         else
         {
-            System.out.println(Lang.errorNoClientsFound);
+            System.out.println(Lang.errorLoadingClients);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ██████╗░███████╗███╗░░░███╗░█████╗░██╗░░░██╗███████╗  ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗
     //      ██╔══██╗██╔════╝████╗░████║██╔══██╗██║░░░██║██╔════╝  ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝
@@ -469,9 +459,9 @@ public class ClientsMenu
         }
         else
         {
-            System.out.println(Lang.errorNoClientsFound);
+            System.out.println(Lang.errorLoadingClients);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ██╗░░░░░██╗░██████╗████████╗  ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗░██████╗
     //      ██║░░░░░██║██╔════╝╚══██╔══╝  ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝██╔════╝
@@ -492,7 +482,8 @@ public class ClientsMenu
         }
         else
         {
-            System.out.println(Lang.errorNoClientsFound);
+            System.out.println(Lang.errorLoadingClients);
         }
+        Functions.pressEnterToContinue();
     }
 }

@@ -15,22 +15,9 @@ public class Get
     //      ╚═╝░░░░░╚═╝░░╚═╝░╚════╝░╚═════╝░░╚═════╝░░╚════╝░░░░╚═╝░░░╚═════╝░
     public static Product getProduct(int code)
     {
-        if (Data.products.containsKey(code))
-        {
-            return Data.products.get(code);
-        }
-        return null;
-    }
-    public static Product getProduct(String name)
-    {
-        for (Product p : Data.products.values())
-        {
-            if (p.getName().equals(name))
-            {
-                return p;
-            }
-        }
-        return null;
+        if (!Data.products.containsKey(code)) return null;
+
+        return Data.products.get(code);
     }
     //      ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗░██████╗
     //      ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝██╔════╝
@@ -44,18 +31,6 @@ public class Get
 
         return Data.clients.get(id);
     }
-    public static Client getClient(String name)
-    {
-        for (Client c : Data.clients.values())
-        {
-            if (c.getName().equals(name))
-            {
-                return c;
-            }
-        }
-
-        return null;
-    }
     //      ░██████╗░█████╗░██╗░░░░░███████╗░██████╗
     //      ██╔════╝██╔══██╗██║░░░░░██╔════╝██╔════╝
     //      ╚█████╗░███████║██║░░░░░█████╗░░╚█████╗░
@@ -67,17 +42,5 @@ public class Get
         if (!Data.sales.containsKey(id)) return null;
 
         return Data.sales.get(id);
-    }
-    public static Sale getSale(Client client)
-    {
-        for (Sale sale : Data.sales.values())
-        {
-            if (sale.getClientId() == client.getId())
-            {
-                return sale;
-            }
-        }
-
-        return null;
     }
 }

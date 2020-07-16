@@ -1,14 +1,15 @@
 package ProjetoTap.Menus;
 
+import ProjetoTap.Data.Data;
+import ProjetoTap.Data.Lang;
+import ProjetoTap.Functions;
+import ProjetoTap.ReadInput.ReadClient;
+import ProjetoTap.ReadInput.ReadProduct;
 import ProjetoTap.StructureActions.Create;
 import ProjetoTap.StructureActions.Get;
-import ProjetoTap.Data.Data;
-import ProjetoTap.Functions;
-import ProjetoTap.Data.Lang;
-import ProjetoTap.Structures.Sale;
-import ProjetoTap.UserInput.ReadClient;
-import ProjetoTap.UserInput.ReadProduct;
+import ProjetoTap.Structures.Client;
 import ProjetoTap.Structures.Product;
+import ProjetoTap.Structures.Sale;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -16,7 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static ProjetoTap.Functions.errorReset;
-import static ProjetoTap.Main.readMenuOption;
 import static ProjetoTap.Main.sc;
 
 public class SalesMenu
@@ -32,14 +32,14 @@ public class SalesMenu
         int option;
         do
         {
-            Functions.prepareMenu(Lang.colorYellow + Lang.salesMenu);
+            ArrayList<String> options = new ArrayList<String>()
+            {{
+                add(Lang.makeSaleMenu);
+                add(Lang.categoriesWithMostSalesMenu);
+                add(Lang.clientViewPurchasesMenu);
+            }};
 
-            System.out.println(Lang.colorYellow + "0. " + Lang.exit);
-            System.out.println(Lang.colorGreen + "1. " + Lang.makeSaleMenu);
-            System.out.println(Lang.colorGreen + "2. " + Lang.categoriesWithMostSalesMenu);
-            System.out.println(Lang.colorGreen + "3. " + Lang.clientViewPurchasesMenu);
-
-            option = readMenuOption(0, 3);
+            option = Functions.printMenu(Lang.salesMenu, options, true);
             switch (option)
             {
                 case 1: // MAKE SALE
@@ -66,88 +66,73 @@ public class SalesMenu
 
         if (Data.products.size() <= 0)
         {
-            System.out.println(Lang.errorNoProductsFound);
+            // ERROR: THERE ARE NO PRODUCTS
+            System.out.println(Lang.errorLoadingProducts);
         }
         else if (Data.clients.size() <= 0)
         {
-            System.out.println(Lang.errorNoClientsFound);
+            // ERROR: THERE ARE NO CLIENTS
+            System.out.println(Lang.errorLoadingClients);
         }
         else
         {
+            // READ A CLIENT ID FROM THE USER
             int clientId = ReadClient.existingClientId();
 
+            // <PRODUCT CODE, AMOUNT>
             Map<Integer, Integer> saleProducts = new HashMap<>();
 
+            // READ PRODUCTS FROM THE USER TO ADD TO THE SALE
             do
             {
+                // READ A PRODUCT CODE
                 int productCode = ReadProduct.existingProductCode();
+                // READ AMOUNT OF PRODUCT TO SELL
                 int stock = ReadProduct.productStock(true);
 
+                // ERROR: THE PRODUCT DOES NOT HAVE ENOUGH STOCK
                 if (Data.products.get(productCode).getStock() < stock)
                 {
                     System.out.println(Lang.errorNotEnoughStock);
                 }
+                // IF THE PRODUCT HAS ENOUGH STOCK
                 else
                 {
+                    // IF THIS SALE IS GOING TO SET THE PRODUCT STOCK TO 0
                     if (Data.products.get(productCode).getStock() == stock)
                     {
+                        // PRINT A MESSAGE INFORMING THE USER THAT THE PRODUCT IS OUT OF STOCK
                         System.out.println(MessageFormat.format(Lang.outOfStock, Data.products.get(productCode).getName()));
                     }
+
+                    // ADD THE PRODUCT TO THE SALE MAP
                     if (!saleProducts.containsKey(productCode))
                     {
                         saleProducts.put(productCode, stock);
                     }
                     else
                     {
-                        int amount = saleProducts.get(productCode);
-
-                        saleProducts.put(productCode, amount + stock);
+                        int existingAmount = saleProducts.get(productCode);
+                        saleProducts.put(productCode, existingAmount + stock);
                     }
                 }
-            } while (addMoreProducts());
+                // READ IF THE USER WANTS TO ADD ANOTHER PRODUCT
+            } while (Functions.yesOrNo(Lang.addMoreProducts));
 
-            ArrayList<Product> productsArray = new ArrayList<>();
-            for (int key : saleProducts.keySet())
+            // LOOP EVERY SALE PRODUCT AND REMOVE IT'S STOCK ACCORDING TO THE SOLD AMOUNT
+            for (int productCode : saleProducts.keySet())
             {
-                Product p = Get.getProduct(key);
-
-                p.removeStock(saleProducts.get(key));
-                Data.products.put(p.getCode(), p);
-
-                for (int i = 0; i < key; i++)
-                {
-                    productsArray.add(p);
-                }
+                // GET THE PRODUCT
+                Get.getProduct(productCode).removeStock(saleProducts.get(productCode));
             }
 
-            Create.createSale(clientId, productsArray);
+            // CREATE THE SALE
+            Create.createSale(clientId, saleProducts);
+
             System.out.println(Lang.saleCreated);
         }
-        Functions.pressAnyKeyToContinue();
-    }
-    public static boolean addMoreProducts()
-    {
-        try
-        {
-            System.out.println(Lang.addMoreProducts);
 
-            String cont = sc.next();
-
-            if (cont.toLowerCase().equals("y") || cont.toLowerCase().equals("n"))
-            {
-                return cont.toLowerCase().equals("y");
-            }
-            else
-            {
-                errorReset(Lang.errorInvalidBooleanOption);
-                return addMoreProducts();
-            }
-        }
-        catch (Exception ignored)
-        {
-            errorReset(Lang.errorWrongDataType);
-            return addMoreProducts();
-        }
+        Functions.pressEnterToContinue();
     }
     //      ░█████╗░░█████╗░████████╗███████╗░██████╗░░█████╗░██████╗░██╗███████╗░██████╗  ░██╗░░░░░░░██╗██╗████████╗██╗░░██╗  ███╗░░░███╗░█████╗░░██████╗████████╗  ░██████╗░█████╗░██╗░░░░░███████╗░██████╗
     //      ██╔══██╗██╔══██╗╚══██╔══╝██╔════╝██╔════╝░██╔══██╗██╔══██╗██║██╔════╝██╔════╝  ░██║░░██╗░░██║██║╚══██╔══╝██║░░██║  ████╗░████║██╔══██╗██╔════╝╚══██╔══╝  ██╔════╝██╔══██╗██║░░░░░██╔════╝██╔════╝
@@ -159,13 +144,17 @@ public class SalesMenu
     {
         Functions.prepareMenu(Lang.categoriesWithMostSalesMenu);
 
+        // CHECKS IF THERE ARE ANY SALES
         if (Data.sales.size() > 0)
         {
+            // <CATEGORY NAME, AMOUNT OF SALES>
             Map<String, Integer> salesList = new HashMap<>();
             for (Sale s : Data.sales.values())
             {
-                for (Product p : s.getProducts())
+                for (int code : s.getSaleProducts().keySet())
                 {
+                    Product p = Get.getProduct(code);
+
                     if (!salesList.containsKey(p.getCategory()))
                     {
                         salesList.put(p.getCategory(), 1);
@@ -202,9 +191,9 @@ public class SalesMenu
         }
         else
         {
-            System.out.println(Lang.errorNoSalesFound);
+            System.out.println(Lang.errorLoadingSales);
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
     //      ██╗░░░██╗██╗███████╗░██╗░░░░░░░██╗  ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗  ██████╗░██╗░░░██╗██████╗░░█████╗░██╗░░██╗░█████╗░░██████╗███████╗░██████╗
     //      ██║░░░██║██║██╔════╝░██║░░██╗░░██║  ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝  ██╔══██╗██║░░░██║██╔══██╗██╔══██╗██║░░██║██╔══██╗██╔════╝██╔════╝██╔════╝
@@ -218,50 +207,50 @@ public class SalesMenu
 
         if (Data.clients.size() <= 0)
         {
-            System.out.println(Lang.errorNoClientsFound);
+            System.out.println(Lang.errorLoadingClients);
         }
         else if (Data.sales.size() <= 0)
         {
-            System.out.println(Lang.errorNoSalesFound);
+            System.out.println(Lang.errorLoadingSales);
         }
         else
         {
-            int id = ReadClient.existingClientId();
+            int clientId = ReadClient.existingClientId();
 
-            ArrayList<Sale> sales = new ArrayList<>();
-            for (Sale sale : Data.sales.values())
+            Client c = Get.getClient(clientId);
+
+            if (c.getSalesIds().size() > 0)
             {
-                if (sale.getClientId() == id)
-                {
-                    sales.add(sale);
-                }
-            }
+                Map<Integer, Integer> totalProductsSold = new HashMap<>();
 
-            if (sales.size() > 0)
-            {
-                for (Sale s : sales)
+                // MIX EVERY SALE IN A SINGLE MAP
+                for (int saleId : c.getSalesIds())
                 {
-                    System.out.println(MessageFormat.format(Lang.listProductsForSaleForClient, s.getId(), s.getClientId()));
+                    Sale s = Get.getSale(saleId);
+                    Map<Integer, Integer> saleProducts = s.getSaleProducts(); // <PRODUCT ID>, <AMOUNT>
 
-                    Map<Integer, Integer> productsMap = new HashMap<>();
-                    for (Product p : s.getProducts())
+                    for (int productCode : saleProducts.keySet())
                     {
-                        if (!productsMap.containsKey(p.getCode()))
+                        if (!totalProductsSold.containsKey(productCode))
                         {
-                            productsMap.put(p.getCode(), 1);
+                            totalProductsSold.put(productCode, 1);
                         }
                         else
                         {
-                            int existingStock = productsMap.get(p.getCode());
-                            productsMap.put(p.getCode(), existingStock + 1);
+                            int existingAmount = totalProductsSold.get(productCode);
+                            totalProductsSold.put(productCode, existingAmount + 1);
                         }
                     }
+                }
 
-                    for (Integer key : productsMap.keySet())
-                    {
-                        Product p = Get.getProduct(key);
-                        System.out.println(MessageFormat.format(Lang.listedProductForSaleForClient, key, p.getName(), productsMap.get(key), p.getPrice() * key));
-                    }
+                System.out.println(MessageFormat.format(Lang.salesOfClient, c.getName(), c.getId()));
+
+                // PRINT SALES
+                for (int productCode : totalProductsSold.keySet())
+                {
+                    Product p = Get.getProduct(productCode);
+                    double totalPrice = p.getPrice() * totalProductsSold.get(productCode);
+                    System.out.println(MessageFormat.format(Lang.clientSaleListEntry, totalProductsSold.get(productCode), p.getName(), totalPrice));
                 }
             }
             else
@@ -269,6 +258,6 @@ public class SalesMenu
                 System.out.println(Lang.errorClientHasNoSales);
             }
         }
-        Functions.pressAnyKeyToContinue();
+        Functions.pressEnterToContinue();
     }
 }

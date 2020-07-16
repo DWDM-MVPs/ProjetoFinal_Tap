@@ -1,10 +1,8 @@
 package ProjetoTap.StructureActions;
 
 import ProjetoTap.Data.Data;
-import ProjetoTap.Functions;
+import ProjetoTap.Data.Lang;
 import ProjetoTap.Structures.Product;
-
-import java.util.ArrayList;
 
 public class Delete
 {
@@ -48,27 +46,24 @@ public class Delete
     {
         if (returnProductsToStock)
         {
-            ArrayList<Product> saleProducts = Data.sales.get(id).getProducts();
-            saleProducts.forEach((p ->
+            for (int code : Data.sales.get(id).getSaleProducts().keySet())
             {
                 // GET PRODUCT
-                Product existingProduct = Get.getProduct(p.getCode());
+                Product p = Get.getProduct(code);
 
                 // EDIT EXISTING PRODUCT
-                if (existingProduct != null)
+                if (p != null)
                 {
-                    existingProduct.setStock(existingProduct.getStock() + p.getStock());
+                    p.setStock(p.getStock() + p.getStock());
 
-                    Data.products.put(existingProduct.getCode(), existingProduct);
+                    Data.products.put(p.getCode(), p);
                 }
-                // CREATE NEW PRODUCT
+                // PRODUCT DOES NOT EXIST, DISCARD
                 else
                 {
-                    int productId = Functions.generateId(Data.products);
-
-                    Data.products.put(productId, p);
+                    System.out.println(Lang.errorProductRefundDoesNotExist);
                 }
-            }));
+            }
         }
         else
         {

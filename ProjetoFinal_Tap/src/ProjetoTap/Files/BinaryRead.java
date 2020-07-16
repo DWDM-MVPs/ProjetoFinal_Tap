@@ -1,8 +1,8 @@
 package ProjetoTap.Files;
 
 import ProjetoTap.Data.Data;
-import ProjetoTap.Functions;
 import ProjetoTap.Data.Settings;
+import ProjetoTap.Functions;
 import ProjetoTap.Structures.Client;
 import ProjetoTap.Structures.Product;
 import ProjetoTap.Structures.Sale;

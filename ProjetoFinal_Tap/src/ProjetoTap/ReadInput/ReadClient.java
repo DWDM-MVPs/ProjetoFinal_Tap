@@ -1,14 +1,13 @@
-package ProjetoTap.UserInput;
+package ProjetoTap.ReadInput;
 
 import ProjetoTap.Data.Data;
+import ProjetoTap.Data.Lang;
 import ProjetoTap.Data.Settings;
 import ProjetoTap.Functions;
-import ProjetoTap.Data.Lang;
 
 import java.text.MessageFormat;
 
 import static ProjetoTap.Functions.errorReset;
-import static ProjetoTap.Main.readString;
 import static ProjetoTap.Main.sc;
 
 public class ReadClient
@@ -19,9 +18,9 @@ public class ReadClient
     //      ██║░░██╗██║░░░░░██║██╔══╝░░██║╚████║░░░██║░░░  ██║██║░░██║
     //      ╚█████╔╝███████╗██║███████╗██║░╚███║░░░██║░░░  ██║██████╔╝
     //      ░╚════╝░╚══════╝╚═╝╚══════╝╚═╝░░╚══╝░░░╚═╝░░░  ╚═╝╚═════╝░
-    public static int clientId(boolean canAlreadyExist)
+    public static int clientId(boolean canAlreadyExist, String readMessage)
     {
-        System.out.println(Lang.readClientId);
+        System.out.println(readMessage);
         try
         {
             int code = sc.nextInt();
@@ -29,14 +28,14 @@ public class ReadClient
             if (!canAlreadyExist && Data.clients.containsKey(code))
             {
                 errorReset(MessageFormat.format(Lang.readWrongClientId, code));
-                return clientId(false);
+                return clientId(false, readMessage);
             }
             return code;
         }
         catch (Exception ignored)
         {
             errorReset(Lang.errorWrongDataType);
-            return clientId(canAlreadyExist);
+            return clientId(canAlreadyExist, readMessage);
         }
     }
     //      ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗  ███╗░░██╗░█████╗░███╗░░░███╗███████╗
@@ -50,7 +49,7 @@ public class ReadClient
         System.out.println(Lang.readClientName);
         try
         {
-            return readString();
+            return Functions.readString();
         }
         catch (Exception ignored)
         {
@@ -69,7 +68,7 @@ public class ReadClient
         System.out.println(Lang.readClientCity);
         try
         {
-            return readString();
+            return Functions.readString();
         }
         catch (Exception ignored)
         {
@@ -112,10 +111,9 @@ public class ReadClient
     //      ╚══════╝╚═╝░░╚═╝╚═╝╚═════╝░░░░╚═╝░░░╚═╝╚═╝░░╚══╝░╚═════╝░  ░╚════╝░╚══════╝╚═╝╚══════╝╚═╝░░╚══╝░░░╚═╝░░░  ╚═╝╚═════╝░
     public static int existingClientId()
     {
-        System.out.println(Lang.existingClientId);
         try
         {
-            int id = clientId(true);
+            int id = clientId(true, Lang.readExistingClientId);
 
             if (Data.clients.containsKey(id))
             {
