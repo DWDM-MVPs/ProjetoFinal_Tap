@@ -2,7 +2,10 @@ package ProjetoTap.StructureActions;
 
 import ProjetoTap.Data.Data;
 import ProjetoTap.Data.Lang;
+import ProjetoTap.Functions;
+import ProjetoTap.Structures.Client;
 import ProjetoTap.Structures.Product;
+import ProjetoTap.Structures.Sale;
 
 public class Delete
 {
@@ -42,32 +45,57 @@ public class Delete
     //      ░╚═══██╗██╔══██║██║░░░░░██╔══╝░░░╚═══██╗
     //      ██████╔╝██║░░██║███████╗███████╗██████╔╝
     //      ╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═════╝░
-    public static void deleteSale(int id, boolean returnProductsToStock)
+    public static void deleteSale(int saleId, boolean returnProductsToStock)
     {
+        Sale s = Get.getSale(saleId);
+
         if (returnProductsToStock)
         {
-            for (int code : Data.sales.get(id).getSaleProducts().keySet())
+            if (s != null)
             {
-                // GET PRODUCT
-                Product p = Get.getProduct(code);
-
-                // EDIT EXISTING PRODUCT
-                if (p != null)
+                for (int productCode : s.getSaleProducts().keySet())
                 {
-                    p.setStock(p.getStock() + p.getStock());
-
-                    Data.products.put(p.getCode(), p);
+                    // EDIT EXISTING PRODUCT
+                    if (Get.getProduct(productCode) != null)
+                    {
+                        Get.getProduct(productCode).addStock(s.getSaleProducts().get(productCode));
+                    }
+                    // PRODUCT DOES NOT EXIST, DISCARD AND PRINT ERROR
+                    else
+                    {
+                        System.out.println(Lang.errorProductRefundDoesNotExist);
+                    }
                 }
-                // PRODUCT DOES NOT EXIST, DISCARD
-                else
-                {
-                    System.out.println(Lang.errorProductRefundDoesNotExist);
-                }
+            }
+            else
+            {
+                System.out.println(Lang.errorUnknown);
             }
         }
         else
         {
-            Data.sales.remove(id);
+            // REMOVE SALE FROM CLIENT
+            if (s != null)
+            {
+                Client c = Get.getClient(s.getClientId());
+
+                if (c != null)
+                {
+                    c.removeSale(saleId);
+                }
+                else
+                {
+                    System.out.println(Lang.errorUnknown);
+                }
+            }
+            else
+            {
+                System.out.println(Lang.errorUnknown);
+            }
+            // REMOVE SALE
+            Data.sales.remove(saleId);
         }
+
+        Functions.pressEnterToContinue();
     }
 }

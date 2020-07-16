@@ -6,6 +6,7 @@ import ProjetoTap.Data.Settings;
 import ProjetoTap.Functions;
 import ProjetoTap.ReadInput.ReadClient;
 import ProjetoTap.StructureActions.Create;
+import ProjetoTap.StructureActions.Delete;
 import ProjetoTap.StructureActions.Get;
 import ProjetoTap.Structures.Client;
 
@@ -93,7 +94,7 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.createProductMenu);
 
-        int id = ReadClient.clientId(false, Lang.readExistingClientId);
+        int id = ReadClient.clientId(false, Lang.readClientId);
         String name = ReadClient.clientName();
         String city = ReadClient.clientCity();
         int birthYear = ReadClient.clientBirthYear();
@@ -120,7 +121,7 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.oldestClientMenu);
 
-        if (Data.clients.size() > 0)
+        if (!Data.clients.isEmpty())
         {
             int oldestAge = 0;
 
@@ -136,7 +137,7 @@ public class ClientsMenu
         }
         else
         {
-            System.out.println(Lang.errorLoadingClients);
+            System.out.println(Lang.errorNoClientsFound);
         }
         Functions.pressEnterToContinue();
     }
@@ -150,7 +151,7 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.averageClientAgeMenu);
 
-        if (Data.clients.size() > 0)
+        if (!Data.clients.isEmpty())
         {
             int ageSum = 0;
 
@@ -165,7 +166,7 @@ public class ClientsMenu
         }
         else
         {
-            System.out.println(Lang.errorLoadingClients);
+            System.out.println(Lang.errorNoClientsFound);
         }
         Functions.pressEnterToContinue();
     }
@@ -179,7 +180,7 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.viewClientsByUpperAgeMenu);
 
-        if (Data.clients.size() > 0)
+        if (!Data.clients.isEmpty())
         {
             int baseAge = readAge();
 
@@ -194,7 +195,7 @@ public class ClientsMenu
         }
         else
         {
-            System.out.println(Lang.errorLoadingClients);
+            System.out.println(Lang.errorNoClientsFound);
         }
         Functions.pressEnterToContinue();
     }
@@ -230,7 +231,7 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.viewClientsByCityMenu);
 
-        if (Data.clients.size() > 0)
+        if (!Data.clients.isEmpty())
         {
             String city = ReadClient.clientCity();
 
@@ -253,12 +254,12 @@ public class ClientsMenu
             }
             else
             {
-                System.out.println(Lang.errorLoadingClients);
+                System.out.println(Lang.errorNoClientsFound);
             }
         }
         else
         {
-            System.out.println(Lang.errorLoadingClients);
+            System.out.println(Lang.errorNoClientsFound);
         }
         Functions.pressEnterToContinue();
     }
@@ -272,7 +273,7 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.viewIfExistsByNameMenu);
 
-        if (Data.clients.size() > 0)
+        if (!Data.clients.isEmpty())
         {
             String name = ReadClient.clientName();
 
@@ -295,28 +296,28 @@ public class ClientsMenu
             }
             else
             {
-                System.out.println(Lang.errorLoadingClients);
+                System.out.println(Lang.errorNoClientsFound);
             }
         }
         else
         {
-            System.out.println(Lang.errorLoadingClients);
+            System.out.println(Lang.errorNoClientsFound);
         }
         Functions.pressEnterToContinue();
     }
-    //      ██╗░░░██╗██╗███████╗░██╗░░░░░░░██╗  ░█████╗░░██████╗░███████╗  ███╗░░░███╗░█████╗░██████╗░███████╗
-    //      ██║░░░██║██║██╔════╝░██║░░██╗░░██║  ██╔══██╗██╔════╝░██╔════╝  ████╗░████║██╔══██╗██╔══██╗██╔════╝
-    //      ╚██╗░██╔╝██║█████╗░░░╚██╗████╗██╔╝  ███████║██║░░██╗░█████╗░░  ██╔████╔██║██║░░██║██║░░██║█████╗░░
-    //      ░╚████╔╝░██║██╔══╝░░░░████╔═████║░  ██╔══██║██║░░╚██╗██╔══╝░░  ██║╚██╔╝██║██║░░██║██║░░██║██╔══╝░░
-    //      ░░╚██╔╝░░██║███████╗░░╚██╔╝░╚██╔╝░  ██║░░██║╚██████╔╝███████╗  ██║░╚═╝░██║╚█████╔╝██████╔╝███████╗
-    //      ░░░╚═╝░░░╚═╝╚══════╝░░░╚═╝░░░╚═╝░░  ╚═╝░░╚═╝░╚═════╝░╚══════╝  ╚═╝░░░░░╚═╝░╚════╝░╚═════╝░╚══════╝
+    //      ░█████╗░░██████╗░███████╗  ███╗░░░███╗░█████╗░██████╗░███████╗
+    //      ██╔══██╗██╔════╝░██╔════╝  ████╗░████║██╔══██╗██╔══██╗██╔════╝
+    //      ███████║██║░░██╗░█████╗░░  ██╔████╔██║██║░░██║██║░░██║█████╗░░
+    //      ██╔══██║██║░░╚██╗██╔══╝░░  ██║╚██╔╝██║██║░░██║██║░░██║██╔══╝░░
+    //      ██║░░██║╚██████╔╝███████╗  ██║░╚═╝░██║╚█████╔╝██████╔╝███████╗
+    //      ╚═╝░░╚═╝░╚═════╝░╚══════╝  ╚═╝░░░░░╚═╝░╚════╝░╚═════╝░╚══════╝
     public static void showViewAgeMode()
     {
         Functions.prepareMenu(Lang.viewAgeModeMenu);
 
-        if (Data.clients.size() > 0)
+        if (!Data.clients.isEmpty())
         {
-            Map<Integer, Integer> ageMap = new HashMap<>();
+            Map<Integer, Integer> ageMap = new HashMap<>(); // <AGE>, <COUNT>
             for (Client c : Data.clients.values())
             {
                 if (!ageMap.containsKey(c.getAge()))
@@ -330,27 +331,20 @@ public class ClientsMenu
                 }
             }
 
-            int oldestAge = 0;
-            StringBuilder ageString = new StringBuilder();
-            for (Integer age : ageMap.keySet())
+            int ageMode = -1;
+            for (int age : ageMap.keySet())
             {
-                if (age > oldestAge)
+                if (age > ageMode)
                 {
-                    oldestAge = age;
-                    ageString = new StringBuilder(age);
-                }
-
-                if (oldestAge == age)
-                {
-                    ageString.append(", ").append(age);
+                    ageMode = age;
                 }
             }
 
-            System.out.println(MessageFormat.format(Lang.listModeClientAge, ageString));
+            System.out.println(MessageFormat.format(Lang.listModeClientAge, ageMode));
         }
         else
         {
-            System.out.println(Lang.errorLoadingClients);
+            System.out.println(Lang.errorNoClientsFound);
         }
         Functions.pressEnterToContinue();
     }
@@ -364,13 +358,13 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.mostMoneySpentMenu);
 
-        if (Data.clients.size() == 0)
+        if (Data.clients.isEmpty())
         {
-            System.out.println(Lang.errorLoadingClients);
+            System.out.println(Lang.errorNoClientsFound);
         }
-        else if (Data.sales.size() == 0)
+        else if (Data.sales.isEmpty())
         {
-            System.out.println(Lang.errorLoadingSales);
+            System.out.println(Lang.errorNoSalesFound);
         }
         else
         {
@@ -399,7 +393,7 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.editClientMenu);
 
-        if (Data.clients.size() > 0)
+        if (!Data.clients.isEmpty())
         {
             int id = ReadClient.existingClientId();
             Client c = Get.getClient(id);
@@ -411,27 +405,24 @@ public class ClientsMenu
             System.out.println(Lang.editClientName);
             if (Functions.readBoolean())
             {
-                newName = ReadClient.clientName();
+                c.setName(ReadClient.clientName());
             }
             System.out.println(Lang.editClientCity);
             if (Functions.readBoolean())
             {
-                newCity = ReadClient.clientCity();
+                c.setCity(ReadClient.clientCity());
             }
             System.out.println(Lang.editClientBirthYear);
             if (Functions.readBoolean())
             {
-                newBirthYear = ReadClient.clientBirthYear();
+                c.setBirthYear(ReadClient.clientBirthYear());
             }
-
-            Client newClient = new Client(id, newName, newCity, newBirthYear);
-            Data.clients.put(id, newClient);
 
             System.out.println(Lang.clientUpdatedSuccessfully);
         }
         else
         {
-            System.out.println(Lang.errorLoadingClients);
+            System.out.println(Lang.errorNoClientsFound);
         }
         Functions.pressEnterToContinue();
     }
@@ -445,21 +436,21 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.removeClientMenu);
 
-        if (Data.clients.size() > 0)
+        if (!Data.clients.isEmpty())
         {
             int id = ReadClient.existingClientId();
 
             System.out.println(MessageFormat.format(Lang.confirmClientDelete, id));
             if (Functions.readBoolean())
             {
-                Data.clients.remove(id);
+                Delete.deleteClient(id);
 
                 System.out.println(Lang.clientDeletedSuccessfully);
             }
         }
         else
         {
-            System.out.println(Lang.errorLoadingClients);
+            System.out.println(Lang.errorNoClientsFound);
         }
         Functions.pressEnterToContinue();
     }
@@ -473,7 +464,7 @@ public class ClientsMenu
     {
         Functions.prepareMenu(Lang.listClientsMenu);
 
-        if (Data.clients.size() > 0)
+        if (!Data.clients.isEmpty())
         {
             for (Client c : Data.clients.values())
             {
@@ -482,7 +473,7 @@ public class ClientsMenu
         }
         else
         {
-            System.out.println(Lang.errorLoadingClients);
+            System.out.println(Lang.errorNoClientsFound);
         }
         Functions.pressEnterToContinue();
     }

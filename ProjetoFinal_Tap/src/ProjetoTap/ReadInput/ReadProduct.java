@@ -22,7 +22,7 @@ public class ReadProduct
         {
             int code = sc.nextInt();
 
-            if (!canAlreadyExist && Data.products.containsKey(code))
+            if (!canAlreadyExist && Data.products.containsKey(code) || code <= 0)
             {
                 errorReset(Lang.readWrongProductCode);
                 return productCode(false, readMessage);
@@ -150,7 +150,7 @@ public class ReadProduct
             }
             else
             {
-                errorReset(Lang.errorNonexistentProductCode);
+                errorReset(Lang.errorProductCodeDoesNotExist);
                 return existingProductCode();
             }
         }

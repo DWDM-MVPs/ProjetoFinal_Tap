@@ -3,6 +3,7 @@ package ProjetoTap.Files;
 import ProjetoTap.Data.Data;
 import ProjetoTap.Data.Settings;
 import ProjetoTap.Functions;
+import ProjetoTap.StructureActions.Create;
 import ProjetoTap.Structures.Client;
 import ProjetoTap.Structures.Product;
 import ProjetoTap.Structures.Sale;
@@ -33,7 +34,7 @@ public class BinaryRead
 
             map.forEach((key, p) ->
             {
-                Data.products.put(key, p);
+                Create.createProduct(p, true);
             });
 
             return map.size();
@@ -62,7 +63,7 @@ public class BinaryRead
 
             map.forEach((key, c) ->
             {
-                Data.clients.put(key, c);
+                Create.createClient(c, true);
             });
 
             return map.size();

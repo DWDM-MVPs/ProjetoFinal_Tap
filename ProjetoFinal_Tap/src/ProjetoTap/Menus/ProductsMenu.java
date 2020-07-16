@@ -5,6 +5,7 @@ import ProjetoTap.Data.Lang;
 import ProjetoTap.Functions;
 import ProjetoTap.ReadInput.ReadProduct;
 import ProjetoTap.StructureActions.Create;
+import ProjetoTap.StructureActions.Delete;
 import ProjetoTap.StructureActions.Get;
 import ProjetoTap.Structures.Product;
 import ProjetoTap.Structures.Sale;
@@ -41,6 +42,7 @@ public class ProductsMenu
                 add(Lang.removeStockMenu);
                 add(Lang.mostExpensiveProductMenu);
                 add(Lang.mostSoldProductsMenu);
+                add(Lang.largestCategoryMenu);
             }};
 
             option = Functions.printMenu(Lang.productsMenu, options, true);
@@ -82,6 +84,9 @@ public class ProductsMenu
                 case 12: // MOST SOLD PRODUCTS
                     showMostSoldProducts();
                     break;
+                case 13: // LARGEST CATEGORY
+                    showLargestCategory();
+                    break;
             }
         } while (option != 0);
     }
@@ -95,7 +100,7 @@ public class ProductsMenu
     {
         Functions.prepareMenu(Lang.listProducts);
 
-        if (Data.products.size() > 0)
+        if (!Data.products.isEmpty())
         {
             Map<String, ArrayList<Product>> productsMap = new HashMap<>();
 
@@ -124,13 +129,13 @@ public class ProductsMenu
 
                 for (Product p : categoryProducts)
                 {
-                    System.out.println(p.getCode() + " - " + p.getName() + " - " + p.getStock() + " - " +  p.getPrice());
+                    System.out.println(" » " + p.getCode() + " - " + p.getName() + " - " + p.getStock() + " - " +  p.getPrice());
                 }
             }
         }
         else
         {
-            System.out.println(Lang.errorLoadingProducts);
+            System.out.println(Lang.errorNoProductsFound);
         }
         Functions.pressEnterToContinue();
     }
@@ -174,7 +179,7 @@ public class ProductsMenu
 
         Map<String, Integer> categoriesSize = new HashMap<>();
 
-        if (Data.products.size() > 0)
+        if (!Data.products.isEmpty())
         {
             for (Product p : Data.products.values())
             {
@@ -203,7 +208,7 @@ public class ProductsMenu
         }
         else
         {
-            System.out.println(Lang.errorLoadingProducts);
+            System.out.println(Lang.errorNoProductsFound);
         }
         Functions.pressEnterToContinue();
     }
@@ -217,36 +222,20 @@ public class ProductsMenu
     {
         Functions.prepareMenu(Lang.listOutOfStockMenu);
 
-        if (Data.products.size() > 0)
+        if (!Data.products.isEmpty())
         {
-            ArrayList<String> outOfStockProducts = new ArrayList<>();
-
+            System.out.println(Lang.outOfStockProducts);
             for (Product p : Data.products.values())
             {
                 if (p.getStock() == 0)
                 {
-                    outOfStockProducts.add(p.getName() + " (#" + p.getCode() + ")");
+                    System.out.println(" » " + p.getName() + " (#" + p.getCode() + ", Category: " + p.getCategory() + ")");
                 }
             }
-
-            StringBuilder outString = null;
-            for (String s : outOfStockProducts)
-            {
-                if (outString == null)
-                {
-                    outString = new StringBuilder(s);
-                }
-                else
-                {
-                    outString.append(", ").append(s);
-                }
-            }
-
-            System.out.println(Lang.outOfStockProducts);
         }
         else
         {
-            System.out.println(Lang.errorLoadingProducts);
+            System.out.println(Lang.errorNoProductsFound);
         }
         Functions.pressEnterToContinue();
     }
@@ -260,13 +249,13 @@ public class ProductsMenu
     {
         Functions.prepareMenu(Lang.viewIfProductExistsByCodeMenu);
 
-        if (Data.products.size() > 0)
+        if (!Data.products.isEmpty())
         {
             int code = ReadProduct.productCode(true, Lang.readExistingProductCode);
 
             if (Data.products.containsKey(code))
             {
-                Product p = Data.products.get(code);
+                Product p = Get.getProduct(code);
                 System.out.println(MessageFormat.format(Lang.listedProductFoundByCode, code, p.getName(), p.getCategory(), p.getStock(), p.getPrice()));
             }
             else
@@ -276,7 +265,7 @@ public class ProductsMenu
         }
         else
         {
-            System.out.println(Lang.errorLoadingProducts);
+            System.out.println(Lang.errorNoProductsFound);
         }
         Functions.pressEnterToContinue();
     }
@@ -290,7 +279,7 @@ public class ProductsMenu
     {
         Functions.prepareMenu(Lang.averagePricePerCategoryMenu);
 
-        if (Data.products.size() > 0)
+        if (!Data.products.isEmpty())
         {
             Map<String, Integer> categoriesSize = new HashMap<>();
             Map<String, Double> categoriesValue = new HashMap<>();
@@ -318,6 +307,10 @@ public class ProductsMenu
                 System.out.println(" » " + category + " - " + averagePrice + " €");
             }
         }
+        else
+        {
+            System.out.println(Lang.errorNoProductsFound);
+        }
         Functions.pressEnterToContinue();
     }
     //      ░█████╗░██████╗░██████╗░  ░██████╗████████╗░█████╗░░█████╗░██╗░░██╗
@@ -330,19 +323,16 @@ public class ProductsMenu
     {
         Functions.prepareMenu(Lang.addStockMenu);
 
-        if (Data.products.size() > 0)
+        if (!Data.products.isEmpty())
         {
             int code = ReadProduct.existingProductCode();
             int stock = ReadProduct.productStock(true);
 
-            Product p = Data.products.get(code);
-            p.addStock(stock);
-
-            Data.products.put(p.getCode(), p);
+            Get.getProduct(code).addStock(stock);
         }
         else
         {
-            System.out.println(Lang.errorLoadingProducts);
+            System.out.println(Lang.errorNoProductsFound);
         }
         Functions.pressEnterToContinue();
     }
@@ -356,7 +346,7 @@ public class ProductsMenu
     {
         Functions.prepareMenu(Lang.editProductMenu);
 
-        if (Data.products.size() > 0)
+        if (!Data.products.isEmpty())
         {
             int code = ReadProduct.existingProductCode();
             Product p = Get.getProduct(code);
@@ -387,13 +377,13 @@ public class ProductsMenu
             }
 
             Product newProduct = new Product(code, newName, newCategory, newStock, newPrice);
-            Data.products.put(code, newProduct);
+            Create.createProduct(newProduct, false);
 
             System.out.println(Lang.productUpdatedSuccessfully);
         }
         else
         {
-            System.out.println(Lang.errorLoadingProducts);
+            System.out.println(Lang.errorNoProductsFound);
         }
         Functions.pressEnterToContinue();
     }
@@ -407,21 +397,21 @@ public class ProductsMenu
     {
         Functions.prepareMenu(Lang.removeProductMenu);
 
-        if (Data.products.size() > 0)
+        if (!Data.products.isEmpty())
         {
             int code = ReadProduct.existingProductCode();
 
             System.out.println(MessageFormat.format(Lang.confirmProductDelete, code));
             if (Functions.readBoolean())
             {
-                Data.products.remove(code);
+                Delete.deleteProduct(code);
 
                 System.out.println(Lang.productDeletedSuccessfully);
             }
         }
         else
         {
-            System.out.println(Lang.errorLoadingProducts);
+            System.out.println(Lang.errorNoProductsFound);
         }
         Functions.pressEnterToContinue();
     }
@@ -435,28 +425,33 @@ public class ProductsMenu
     {
         Functions.prepareMenu(Lang.removeStockMenu);
 
-        if (Data.products.size() > 0)
+        if (!Data.products.isEmpty())
         {
-            int code = ReadProduct.existingProductCode();
-            Product p = Get.getProduct(code);
+            int productCode = ReadProduct.existingProductCode();
+            Product p = Get.getProduct(productCode);
 
-            int stock;
-            do
+            if (p != null)
             {
-                stock = ReadProduct.productStock(true);
-                if (stock > p.getStock())
+                int stock;
+                do
                 {
-                    System.out.println(Lang.errorInvalidRemoveStock);
-                }
-            } while (stock > p.getStock());
+                    stock = ReadProduct.productStock(true);
+                    if (stock > p.getStock())
+                    {
+                        System.out.println(Lang.errorInvalidRemoveStock);
+                    }
+                } while (stock > p.getStock());
 
-            p.removeStock(stock);
-
-            Data.products.put(p.getCode(), p);
+                p.removeStock(stock);
+            }
+            else
+            {
+                System.out.println(Lang.errorUnknown);
+            }
         }
         else
         {
-            System.out.println(Lang.errorLoadingProducts);
+            System.out.println(Lang.errorNoProductsFound);
         }
         Functions.pressEnterToContinue();
     }
@@ -470,23 +465,21 @@ public class ProductsMenu
     {
         Functions.prepareMenu(Lang.mostExpensiveProductMenu);
 
-        if (Data.products.size() > 0)
+        if (!Data.products.isEmpty())
         {
-            double mostExpensive = 0;
+            Product mostExpensiveProduct = null;
             int code = -1;
             for (Product p : Data.products.values())
             {
-                if (p.getPrice() > mostExpensive)
+                if (mostExpensiveProduct == null || p.getPrice() > mostExpensiveProduct.getPrice())
                 {
-                    mostExpensive = p.getPrice();
-                    code = p.getCode();
+                    mostExpensiveProduct = p;
                 }
             }
 
-            if (code != -1)
+            if (mostExpensiveProduct != null)
             {
-                Product p = Get.getProduct(code);
-                System.out.println(MessageFormat.format(Lang.listMostExpensiveProduct, code, p.getName(), p.getCategory(), p.getStock(), p.getPrice()));
+                System.out.println(MessageFormat.format(Lang.listMostExpensiveProduct, code, mostExpensiveProduct.getName(), mostExpensiveProduct.getCategory(), mostExpensiveProduct.getStock(), mostExpensiveProduct.getPrice()));
             }
             else
             {
@@ -495,7 +488,7 @@ public class ProductsMenu
         }
         else
         {
-            System.out.println(Lang.errorLoadingProducts);
+            System.out.println(Lang.errorNoProductsFound);
         }
         Functions.pressEnterToContinue();
     }
@@ -509,7 +502,7 @@ public class ProductsMenu
     {
         Functions.prepareMenu(Lang.mostSoldProductsMenu);
 
-        if (Data.sales.size() > 0)
+        if (!Data.sales.isEmpty())
         {
             Map<Integer, Integer> productSales = new HashMap<>();
             for (Sale s : Data.sales.values())
@@ -555,8 +548,63 @@ public class ProductsMenu
         }
         else
         {
-            System.out.println(Lang.errorLoadingSales);
+            System.out.println(Lang.errorNoSalesFound);
         }
+        Functions.pressEnterToContinue();
+    }
+    //      ██╗░░░░░░█████╗░██████╗░░██████╗░███████╗░██████╗████████╗  ░█████╗░░█████╗░████████╗███████╗░██████╗░░█████╗░██████╗░██╗░░░██╗
+    //      ██║░░░░░██╔══██╗██╔══██╗██╔════╝░██╔════╝██╔════╝╚══██╔══╝  ██╔══██╗██╔══██╗╚══██╔══╝██╔════╝██╔════╝░██╔══██╗██╔══██╗╚██╗░██╔╝
+    //      ██║░░░░░███████║██████╔╝██║░░██╗░█████╗░░╚█████╗░░░░██║░░░  ██║░░╚═╝███████║░░░██║░░░█████╗░░██║░░██╗░██║░░██║██████╔╝░╚████╔╝░
+    //      ██║░░░░░██╔══██║██╔══██╗██║░░╚██╗██╔══╝░░░╚═══██╗░░░██║░░░  ██║░░██╗██╔══██║░░░██║░░░██╔══╝░░██║░░╚██╗██║░░██║██╔══██╗░░╚██╔╝░░
+    //      ███████╗██║░░██║██║░░██║╚██████╔╝███████╗██████╔╝░░░██║░░░  ╚█████╔╝██║░░██║░░░██║░░░███████╗╚██████╔╝╚█████╔╝██║░░██║░░░██║░░░
+    //      ╚══════╝╚═╝░░╚═╝╚═╝░░╚═╝░╚═════╝░╚══════╝╚═════╝░░░░╚═╝░░░  ░╚════╝░╚═╝░░╚═╝░░░╚═╝░░░╚══════╝░╚═════╝░░╚════╝░╚═╝░░╚═╝░░░╚═╝░░░
+    public static void showLargestCategory()
+    {
+        Functions.prepareMenu(Lang.largestCategoryMenu);
+
+        if (!Data.products.isEmpty())
+        {
+            String largestCategory = null;
+            int largestCategorySize = 0;
+
+            for (String category : Data.categories.keySet())
+            {
+                int categorySize = Data.categories.get(category).size();
+                if (categorySize > largestCategorySize)
+                {
+                    largestCategory = category;
+                    largestCategorySize = categorySize;
+                }
+            }
+
+            if (largestCategory != null)
+            {
+                ArrayList<Integer> productCodes = Data.categories.get(largestCategory);
+
+                for (int productCode : productCodes)
+                {
+                    Product p = Get.getProduct(productCode);
+
+                    if (p != null)
+                    {
+                        System.out.println(" » " + p.getCode() + " - " + p.getName() + " - " + p.getStock() + " - " +  p.getPrice());
+                    }
+                    else
+                    {
+                        System.out.println(Lang.errorUnknown);
+                    }
+                }
+            }
+            else
+            {
+                System.out.println(Lang.errorUnknown);
+            }
+        }
+        else
+        {
+            System.out.println(Lang.errorNoProductsFound);
+        }
+
         Functions.pressEnterToContinue();
     }
 }

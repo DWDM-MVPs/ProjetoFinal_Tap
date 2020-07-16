@@ -1,7 +1,7 @@
 package ProjetoTap.Structures;
 
-import ProjetoTap.Data.Data;
 import ProjetoTap.Functions;
+import ProjetoTap.StructureActions.Get;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,16 +21,6 @@ public class Client implements Serializable
         setName(name);
         setCity(city);
         setBirthYear(birthYear);
-    }
-
-    public Client(int id, String name, String city, int birthYear, ArrayList<Integer> salesIds, double totalMoneySpent)
-    {
-        setID(id);
-        setName(name);
-        setCity(city);
-        setBirthYear(birthYear);
-        setSalesIds(salesIds);
-        setTotalMoneySpent(totalMoneySpent);
     }
 
     // ############# ID
@@ -79,13 +69,29 @@ public class Client implements Serializable
 
     public void addSale(int saleId)
     {
-        Sale s = Data.sales.get(saleId);
+        Sale s = Get.getSale(saleId);
 
-        for (int productCode : s.getSaleProducts().keySet())
+        if (s != null)
         {
-            this.totalMoneySpent += Data.products.get(productCode).getPrice() * s.getSaleProducts().get(productCode);
+            for (int productCode : s.getSaleProducts().keySet())
+            {
+                this.totalMoneySpent += Get.getProduct(productCode).getPrice() * s.getSaleProducts().get(productCode);
+            }
         }
 
         salesIds.add(saleId);
+    }
+
+    public void removeSale(int saleId)
+    {
+        Sale s = Get.getSale(saleId);
+
+        if (s != null)
+        {
+            for (int productCode : s.getSaleProducts().keySet())
+            {
+                this.totalMoneySpent -= Get.getProduct(productCode).getPrice() * s.getSaleProducts().get(productCode);
+            }
+        }
     }
 }

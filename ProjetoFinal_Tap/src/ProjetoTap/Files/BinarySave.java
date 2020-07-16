@@ -17,6 +17,8 @@ public class BinarySave
     //      ╚═╝░░░░░╚═╝░░╚═╝░╚════╝░╚═════╝░░╚═════╝░░╚════╝░░░░╚═╝░░░╚═════╝░
     public static int saveProducts()
     {
+        if (Data.products.isEmpty()) return 0;
+
         try
         {
             FileOutputStream fos = new FileOutputStream(new File(Settings.productsBinaryPath));
@@ -39,7 +41,7 @@ public class BinarySave
     //      ░╚════╝░╚══════╝╚═╝╚══════╝╚═╝░░╚══╝░░░╚═╝░░░╚═════╝░
     public static int saveClients()
     {
-        if (Data.clients.size() == 0) return 0;
+        if (Data.clients.isEmpty()) return 0;
 
         try
         {
@@ -63,7 +65,7 @@ public class BinarySave
     //      ╚═════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═════╝░
     public static int saveSales()
     {
-        if (Data.sales.size() == 0) return 0;
+        if (Data.sales.isEmpty()) return 0;
 
         try
         {

@@ -2,11 +2,11 @@ package ProjetoTap.StructureActions;
 
 import ProjetoTap.Data.Data;
 import ProjetoTap.Files.BinarySave;
-import ProjetoTap.Functions;
 import ProjetoTap.Structures.Client;
 import ProjetoTap.Structures.Product;
 import ProjetoTap.Structures.Sale;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Create
@@ -17,32 +17,36 @@ public class Create
     //      ██╔═══╝░██╔══██╗██║░░██║██║░░██║██║░░░██║██║░░██╗░░░██║░░░░╚═══██╗
     //      ██║░░░░░██║░░██║╚█████╔╝██████╔╝╚██████╔╝╚█████╔╝░░░██║░░░██████╔╝
     //      ╚═╝░░░░░╚═╝░░╚═╝░╚════╝░╚═════╝░░╚═════╝░░╚════╝░░░░╚═╝░░░╚═════╝░
-    public static Product createProduct(int code, String name, String category, int stock, double price, boolean canCodeAlreadyExist)
+    public static Product createProduct(int productCode, String name, String category, int stock, double price, boolean overrideExisting)
     {
-        if (!canCodeAlreadyExist && Data.products.containsKey(code))
+        if (!overrideExisting && Data.products.containsKey(productCode))
         {
             return null;
         }
         else
         {
-            Product p = new Product(code, name, category, stock, price);
-            Data.products.put(code, p);
+            if (Data.products.containsKey(productCode)) Delete.deleteProduct(productCode);
+
+            Product p = new Product(productCode, name, category, stock, price);
+            Data.products.put(productCode, p);
+
+            // ADD PRODUCT TO CATEGORY
+            ArrayList<Integer> categoryProducts = new ArrayList<>();
+            if (Data.categories.containsKey(category.toLowerCase()))
+            {
+                categoryProducts = Data.categories.get(category.toLowerCase());
+            }
+            categoryProducts.add(productCode);
+            Data.categories.put(category.toLowerCase(), categoryProducts);
+
+            BinarySave.saveProducts();
 
             return p;
         }
     }
-    public static Product createProduct(Product p, boolean canCodeAlreadyExist)
+    public static Product createProduct(Product p, boolean overrideExisting)
     {
-        if (!canCodeAlreadyExist && Data.products.containsKey(p.getCode()))
-        {
-            return null;
-        }
-        else
-        {
-            Data.products.put(p.getCode(), p);
-
-            return p;
-        }
+        return createProduct(p.getCode(), p.getName(), p.getCategory(), p.getStock(), p.getPrice(), overrideExisting);
     }
     //      ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗░██████╗
     //      ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝██╔════╝
@@ -50,19 +54,27 @@ public class Create
     //      ██║░░██╗██║░░░░░██║██╔══╝░░██║╚████║░░░██║░░░░╚═══██╗
     //      ╚█████╔╝███████╗██║███████╗██║░╚███║░░░██║░░░██████╔╝
     //      ░╚════╝░╚══════╝╚═╝╚══════╝╚═╝░░╚══╝░░░╚═╝░░░╚═════╝░
-    public static Client createClient(int id, String name, String city, int birthYear, boolean canIdAlreadyExist)
+    public static Client createClient(int clientId, String name, String city, int birthYear, boolean overrideExisting)
     {
-        if (!canIdAlreadyExist && Data.clients.containsKey(id))
+        if (!overrideExisting && Data.clients.containsKey(clientId))
         {
             return null;
         }
         else
         {
-            Client c = new Client(id, name, city, birthYear);
-            Data.clients.put(id, c);
+            if (Data.clients.containsKey(clientId)) Delete.deleteClient(clientId);
+
+            Client c = new Client(clientId, name, city, birthYear);
+            Data.clients.put(clientId, c);
+
+            BinarySave.saveClients();
 
             return c;
         }
+    }
+    public static Client createClient(Client c, boolean overrideExisting)
+    {
+        return createClient(c.getId(), c.getName(), c.getCity(), c.getBirthYear(), overrideExisting);
     }
     //      ░██████╗░█████╗░██╗░░░░░███████╗░██████╗
     //      ██╔════╝██╔══██╗██║░░░░░██╔════╝██╔════╝
@@ -73,13 +85,14 @@ public class Create
     public static Sale createSale(int clientId, Map<Integer, Integer> products)
     {
         // NOTE: PRODUCT STOCK IS ALREADY BEING REMOVED WHEN THE SALE IS CREATED
+        Sale s = new Sale(clientId, products);
 
-        int saleId = Functions.generateId(Data.sales);
+        Data.sales.put(s.getSaleId(), s);
+        Data.clients.get(clientId).addSale(s.getSaleId());
 
-        Sale s = new Sale(saleId, products);
-
-        Data.sales.put(saleId, s);
-        Data.clients.get(clientId).addSale(saleId);
+        BinarySave.saveProducts();
+        BinarySave.saveClients();
+        BinarySave.saveSales();
 
         return s;
     }

@@ -10,7 +10,6 @@ import ProjetoTap.Functions;
 import ProjetoTap.Structures.Client;
 import ProjetoTap.Structures.Product;
 import ProjetoTap.Structures.Sale;
-import sun.plugin2.message.Message;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -72,10 +71,10 @@ public class BackupsMenu
 
             ArrayList<String> options = new ArrayList<String>()
             {{
-                if (Data.products.size() > 0) add(Lang.productsBackup);
-                if (Data.clients.size() > 0) add(Lang.clientsBackup);
-                if (Data.sales.size() > 0)  add(Lang.salesBackup);
-                if (Data.products.size() > 0 && Data.clients.size() > 0 || Data.products.size() > 0 && Data.sales.size() > 0 || Data.clients.size() > 0 && Data.sales.size() > 0) add(Lang.generalBackup);
+                if (!Data.products.isEmpty()) add(Lang.productsBackup);
+                if (!Data.clients.isEmpty()) add(Lang.clientsBackup);
+                if (!Data.sales.isEmpty())  add(Lang.salesBackup);
+                if (!Data.products.isEmpty() && !Data.clients.isEmpty() || !Data.products.isEmpty() && !Data.sales.isEmpty() || !Data.clients.isEmpty() && !Data.sales.isEmpty()) add(Lang.generalBackup);
                 add(Lang.cancel);
             }};
 

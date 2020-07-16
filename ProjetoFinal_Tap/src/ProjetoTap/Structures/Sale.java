@@ -1,5 +1,8 @@
 package ProjetoTap.Structures;
 
+import ProjetoTap.Data.Data;
+import ProjetoTap.Functions;
+import ProjetoTap.StructureActions.Create;
 import ProjetoTap.StructureActions.Get;
 
 import java.io.Serializable;
@@ -8,13 +11,15 @@ import java.util.Map;
 
 public class Sale implements Serializable
 {
-    private int id;
+    private int saleId = Functions.generateId(Data.sales);
+    private int clientId;
     private Map<Integer, Integer> saleProducts = new HashMap<>(); // ID PRODUTO, QUANTIDADE DE PRODUTOS
     private double totalPrice;
 
-    public Sale(int id, Map<Integer, Integer> products)
+    public Sale() { }
+    public Sale(int clientId, Map<Integer, Integer> products)
     {
-        setId(id);
+        setClientId(clientId);
         if (products != null)
         {
             for (int productCode : products.keySet())
@@ -23,14 +28,12 @@ public class Sale implements Serializable
             }
         }
     }
-    public Sale(int id)
-    {
-        setId(id);
-    }
 
     // ############# ID
-    public void setId(int id) { this.id = id; }
-    public int getId() { return id; }
+    public int getSaleId() { return saleId; }
+    // ############# CLIENT ID
+    public void setClientId(int clientId) { this.clientId = clientId; }
+    public int getClientId() { return clientId; }
     // ############# PRODUCTS
     public void setSaleProducts(Map<Integer, Integer> saleProducts) { this.saleProducts = saleProducts; }
     public Map<Integer, Integer> getSaleProducts() { return saleProducts; }
@@ -59,5 +62,27 @@ public class Sale implements Serializable
         {
             saleProducts.put(productCode, amount);
         }
+    }
+    public void removeProduct(int productCode, int amount)
+    {
+        int existingAmount = saleProducts.get(productCode);
+        if (amount > existingAmount)
+        {
+            saleProducts.put(productCode, existingAmount - amount);
+        }
+
+        Sale s = Create.createSale(clientId, saleProducts);
+
+        Get.getClient(clientId).removeSale(saleId);
+        Get.getClient(clientId).addSale(s.getSaleId());
+    }
+    public void removeProduct(int productCode)
+    {
+        saleProducts.remove(productCode);
+
+        Sale s = Create.createSale(clientId, saleProducts);
+
+        Get.getClient(clientId).removeSale(saleId);
+        Get.getClient(clientId).addSale(s.getSaleId());
     }
 }

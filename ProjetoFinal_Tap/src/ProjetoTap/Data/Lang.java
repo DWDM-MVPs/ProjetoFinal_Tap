@@ -64,6 +64,9 @@ public class Lang
     public static String backupsMenu = "Gerir Backups";
     public static String makeBackupMenu = "Fazer Backup";
     public static String restoreBackupMenu = "Restaurar Backup";
+    public static String deleteSaleMenu = "Apagar Venda";
+    public static String largestCategoryMenu = "Categoria com mais Produtos";
+    public static String editSaleMenu = "Editar Venda";
     //      ░██████╗░███████╗███╗░░██╗███████╗██████╗░░█████╗░██╗░░░░░  ██╗░░░░░░█████╗░███╗░░██╗░██████╗░
     //      ██╔════╝░██╔════╝████╗░██║██╔════╝██╔══██╗██╔══██╗██║░░░░░  ██║░░░░░██╔══██╗████╗░██║██╔════╝░
     //      ██║░░██╗░█████╗░░██╔██╗██║█████╗░░██████╔╝███████║██║░░░░░  ██║░░░░░███████║██╔██╗██║██║░░██╗░
@@ -92,8 +95,8 @@ public class Lang
     public static String productDeletedSuccessfully = colorGreen + "Produto apagado com sucesso." + colorReset;
     public static String pressAnyKeyToContinue = "Clique <ENTER> para continuar...";
     public static String makeBackupConfirmation = "Tem a certeza de que pretende fazer um novo Backup? (y/n):";
-    public static String restoreBackupConfirmation = "Tem a certeza de que pretende restaurar esse Backup?" + colorRed + "\nTodos os dados atuais da categoria do Backup serão perdidos e os dados das outras categorias podem ficar inutilizáveis. (y/n):" + colorReset;
-    public static String areYouReallySureYouWantToDoThis = "Tem mesmo a certeza de que pretende fazer isto?";
+    public static String restoreBackupConfirmation = "Tem a certeza de que pretende restaurar um Backup?" + colorRed + "\nTodos os dados atuais da categoria do Backup serão perdidos e os dados das outras categorias podem ficar inutilizáveis. (y/n):" + colorReset;
+    public static String areYouReallySureYouWantToDoThis = "Tem mesmo a certeza de que pretende fazer isto? (y/n):";
     public static String searchForAnotherBackupFile = "O ficheiro de Backup não foi encontrado ou é inválido. Deseja procurar novamente?";
     public static String insertBackupPath = "Insira o caminho do ficheiro de Backup a restaurar: ";
     public static String chooseBackupType = colorCyan + "Escolha o tipo de Backup:" + colorReset;
@@ -101,6 +104,9 @@ public class Lang
     public static String clientsBackup = "Backup dos Clientes";
     public static String salesBackup = "Backup das Vendas";
     public static String generalBackup = "Backup geral";
+    public static String returnProductsToStock = "Devolver os Produtos ao Stock?";
+    public static String saleDeleteSuccessfully = colorGreen + "Venda apagada com sucesso!" + colorReset;
+    public static String saleProducts = "Produtos da Venda:";
     //      ██████╗░███████╗░█████╗░██████╗░  ██╗░░░░░░█████╗░███╗░░██╗░██████╗░
     //      ██╔══██╗██╔════╝██╔══██╗██╔══██╗  ██║░░░░░██╔══██╗████╗░██║██╔════╝░
     //      ██████╔╝█████╗░░███████║██║░░██║  ██║░░░░░███████║██╔██╗██║██║░░██╗░
@@ -111,9 +117,10 @@ public class Lang
     public static String readWrongProductCode = colorRed + "Um Produto com o Código {0} já existe." + colorReset;
     public static String readProductName = colorPurple + "Insira o Nome do Produto:" + colorReset;
     public static String readProductCategory = colorPurple + "Insira a Categoria do Produto:" + colorReset;
-    public static String readExistingClientId = colorPurple + "Insira o ID de um Cliente que já exista:" + colorReset;
     public static String readExistingProductCode = colorPurple + "Insira o Código de um Produto que já exista:" + colorReset;
-    public static String readProductStock = colorPurple + "Insira a quantidade de Stock do Produto (igual a '0' ou maior):" + colorReset;
+    public static String readExistingClientId = colorPurple + "Insira o ID de um Cliente que já exista:" + colorReset;
+    public static String readExistingSaleId = colorPurple + "Insira o ID de uma Venda que já exista: " + colorReset;
+    public static String readProductStock = colorPurple + "Insira a quantidade de Stock do Produto (igual ou maior que '0'):" + colorReset;
     public static String readProductPrice = colorPurple + "Insira o Preço do Produto (maior que 0):" + colorReset;
     public static String readWrongProductPrice = colorRed + "Um Preço menor ou igual a '0' não é válido." + colorReset;
     public static String readClientId = colorPurple + "Insira o ID do Cliente (único):" + colorReset;
@@ -122,6 +129,7 @@ public class Lang
     public static String readClientBirthYear = colorPurple + "Insira o Ano de Nascimento do Cliente:" + colorReset;
     public static String readWrongClientBirthYear = colorRed + "O Ano de Nascimento inserido não é valido." + colorReset;
     public static String addMoreProducts = colorPurple + "Adicionar mais produtos? (y/n):" + colorReset;
+    public static String readEditProductCode = colorPurple + "Insira o Código do Produto a editar (ou '0' para voltar):" + colorReset;
     //      ░██╗░░░░░░░██╗██╗████████╗██╗░░██╗  ██████╗░░█████╗░██████╗░░█████╗░███╗░░░███╗░██████╗
     //      ░██║░░██╗░░██║██║╚══██╔══╝██║░░██║  ██╔══██╗██╔══██╗██╔══██╗██╔══██╗████╗░████║██╔════╝
     //      ░╚██╗████╗██╔╝██║░░░██║░░░███████║  ██████╔╝███████║██████╔╝███████║██╔████╔██║╚█████╗░
@@ -133,7 +141,7 @@ public class Lang
     public static String averageClientAge = "A Idade média dos Clientes é: {0}";
     public static String categoriesSizeList = "{0} - {1} produto/s";
     public static String outOfStock = "O Produto {0} ficou sem stock nesta venda.";
-    public static String outOfStockProducts = "Produtos sem Stock: {0}";
+    public static String outOfStockProducts = "Produtos sem Stock:";
     public static String clientsWithMoreAge = "Clientes com Idade superior a {0}:";
     public static String listedClient = " » ID: {0} | Nome: {1} | Cidade: {2} | Idade: {3}";
     public static String clientsInCity = "Cliente na cidade {0}:";
@@ -159,6 +167,9 @@ public class Lang
     public static String xProductsBackedUp = colorGreen + "Efetuado o Backup a " + colorWhite + "{0}" + colorGreen + " Produtos com sucesso!";
     public static String xClientsBackedUp = colorGreen + "Efetuado o Backup a " + colorWhite + "{0}" + colorGreen + " Clientes com sucesso!";
     public static String xSalesBackedUp = colorGreen + "Efetuado o Backup a " + colorWhite + "{0}" + colorGreen + " Vendas com sucesso!";
+    public static String areYouSureToDeleteSaleWithId = "Tem a certeza de que pretende apagar a Venda com o ID {0}?";
+    public static String ignoringSaleNotFound = colorRed + "Venda com o ID {0} não foi encontrada. Ignorada." + colorReset;
+    public static String editingClientSale = colorBlack + "A editar a Venda (ID: {0}) feita ao Cliente {1} (ID: {2})";
     //      ███████╗██████╗░██████╗░░█████╗░██████╗░  ██╗░░░░░░█████╗░███╗░░██╗░██████╗░
     //      ██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔══██╗  ██║░░░░░██╔══██╗████╗░██║██╔════╝░
     //      █████╗░░██████╔╝██████╔╝██║░░██║██████╔╝  ██║░░░░░███████║██╔██╗██║██║░░██╗░
@@ -169,8 +180,9 @@ public class Lang
     public static String errorWrongDataType = colorRed + "ERRO: Ocorreu um erro no tipo de dados recebido." + colorReset;
     public static String errorCreatingProduct =  colorRed + "ERRO: Ocorreu um erro ao criar o Produto." + colorReset;
     public static String errorCreatingClient = colorRed + "ERRO: Ocorreu um erro ao criar o Cliente." + colorReset;
-    public static String errorNonexistentProductCode = colorRed + "ERRO: Esse Código de Produto não existe." + colorReset;
-    public static String errorNonexistentClientId = colorRed + "ERRO: Esse ID de Cliente não existe." + colorReset;
+    public static String errorProductCodeDoesNotExist = colorRed + "ERRO: Esse Código de Produto não existe." + colorReset;
+    public static String errorClientIdDoesNotExist = colorRed + "ERRO: Esse ID de Cliente não existe." + colorReset;
+    public static String errorSaleIdDoesNotExist = colorRed + "ERRO: Esse ID de Venda não existe." + colorReset;
     public static String errorInvalidMenuOption = colorRed + "ERRO: Essa opção não está no menu." + colorReset;
     public static String errorInvalidBooleanOption = colorRed + "ERRO: Escolha entre 'y' ou 'n'." + colorReset;
     public static String errorNotEnoughStock = colorRed + "ERRO: O Stock existente é menor que o Stock pedido." + colorReset;
@@ -178,10 +190,10 @@ public class Lang
     public static String errorWrongClientAge = colorRed + "ERRO: A Idade introduzida não é válida." + colorReset;
     public static String errorLoadingProducts = colorRed + "ERRO: Ocorreu um problema ao carregar alguns Produtos." + colorReset;
     public static String errorLoadingClients = colorRed + "ERRO: Ocorreu um problema ao carregar alguns Clientes." + colorReset;
-    public static String errorLoadingSales = colorRed + "ERRO: Ocorreu um problema ao carregar algumas vendas." + colorReset;
+    public static String errorLoadingSales = colorRed + "ERRO: Ocorreu um problema ao carregar algumas Vendas." + colorReset;
     public static String errorSavingProducts = colorRed + "ERRO: Ocorreu um problema ao guardar alguns Produtos." + colorReset;
     public static String errorSavingClients = colorRed + "ERRO: Ocorreu um problema ao guardar alguns Clientes." + colorReset;
-    public static String errorSavingSales = colorRed + "ERRO: Ocorreu um problema ao guardar algumas vendas." + colorReset;
+    public static String errorSavingSales = colorRed + "ERRO: Ocorreu um problema ao guardar algumas Vendas." + colorReset;
     public static String errorProductNotFound = colorRed + "ERRO: Produto não encontrado." + colorReset;
     public static String errorReadLowProductStock = colorRed + "ERRO: A quantidade em Stock tem de ser '0' ou maior." + colorReset;
     public static String errorReadLowOrNullProductStock = colorRed + "ERRO: A quantidade em Stock tem de ser maior que '0'." + colorReset;
@@ -195,4 +207,9 @@ public class Lang
     public static String errorCreatingProductsBackup = colorRed + "ERRO: Ocorreu um erro ao fazer Backup dos Produtos." + colorReset;
     public static String errorCreatingClientsBackup = colorRed + "ERRO: Ocorreu um erro ao fazer Backup dos Clientes." + colorReset;
     public static String errorCreatingSalesBackup = colorRed + "ERRO: Ocorreu um erro ao fazer Backup das Vendas." + colorReset;
+    public static String errorNoProductsFound = colorRed + "ERRO: Nenhum Produto encontrado." + colorReset;
+    public static String errorNoClientsFound = colorRed + "ERRO: Nenhum Cliente encontrado." + colorReset;
+    public static String errorNoSalesFound = colorRed + "ERRO: Nenhuma Venda encontrada." + colorReset;
+    public static String errorInvalidEditSaleOption = colorRed + "ERRO: Esse Código de Produto não está presente na Venda atual." + colorReset;
+    public static String errorInvalidStock = colorRed + "ERRO: Quantidade de Stock inválida." + colorReset;
 }

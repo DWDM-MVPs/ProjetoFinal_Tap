@@ -41,7 +41,7 @@ public class TextSave
     //      ░╚════╝░╚══════╝╚═╝╚══════╝╚═╝░░╚══╝░░░╚═╝░░░╚═════╝░
     public static int saveClients()
     {
-        if (Data.products.size() == 0) return 0;
+        if (Data.products.isEmpty()) return 0;
 
         try
         {
@@ -50,7 +50,17 @@ public class TextSave
             writer.println("CLIENTS BACKUP");
             Data.clients.forEach((key, c) ->
             {
-                writer.println(c.getId() + "\t" + c.getName() + "\t" + c.getCity() + "\t" + c.getBirthYear());
+                StringBuilder salesString = new StringBuilder();
+                boolean addComma = false;
+                for (int saleId : c.getSalesIds())
+                {
+                    if (addComma) salesString.append(",");
+                    addComma = true;
+
+                    salesString.append(saleId);
+                }
+
+                writer.println(c.getId() + "\t" + c.getName() + "\t" + c.getCity() + "\t" + c.getBirthYear() + "\t" + c.getTotalMoneySpent() + "\t" + salesString.toString());
             });
 
             writer.close();
@@ -79,23 +89,20 @@ public class TextSave
             writer.println("SALES BACKUP");
             Data.sales.forEach((key, s) ->
             {
-                StringBuilder productsString = new StringBuilder();
-
-                boolean addTab = false;
-                for (int code : s.getSaleProducts().keySet())
+                if (!s.getSaleProducts().isEmpty())
                 {
-                    int stock = Get.getProduct(code).getStock();
-
-                    if (addTab)
+                    StringBuilder productsString = new StringBuilder();
+                    boolean addComma = false;
+                    for (int productCode : s.getSaleProducts().keySet())
                     {
-                        addTab = false;
-                        productsString.append("\t");
-                    }
-                    productsString.append(code + "|" + stock);
-                    addTab = true;
-                }
+                        if (addComma) productsString.append(",");
+                        addComma = true;
 
-                writer.println(s.getId() + "\t" + productsString);
+                        productsString.append(productCode + "-" + Get.getProduct(productCode).getStock());
+                    }
+
+                    writer.println(s.getSaleId() + "\t" + s.getTotalPrice() + "\t" + productsString);
+                }
             });
 
             writer.close();

@@ -25,7 +25,7 @@ public class ReadClient
         {
             int code = sc.nextInt();
 
-            if (!canAlreadyExist && Data.clients.containsKey(code))
+            if (!canAlreadyExist && Data.clients.containsKey(code) || code <= 0)
             {
                 errorReset(MessageFormat.format(Lang.readWrongClientId, code));
                 return clientId(false, readMessage);
@@ -121,7 +121,7 @@ public class ReadClient
             }
             else
             {
-                errorReset(Lang.errorNonexistentClientId);
+                errorReset(Lang.errorClientIdDoesNotExist);
                 return existingClientId();
             }
         }

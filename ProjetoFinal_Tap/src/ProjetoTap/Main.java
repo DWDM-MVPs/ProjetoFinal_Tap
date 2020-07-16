@@ -3,10 +3,7 @@ package ProjetoTap;
 import ProjetoTap.Data.Lang;
 import ProjetoTap.Files.BinaryRead;
 import ProjetoTap.Files.BinarySave;
-import ProjetoTap.Files.TextRead;
-import ProjetoTap.Files.TextSave;
 import ProjetoTap.Menus.MainMenu;
-import sun.plugin2.message.Message;
 
 import java.text.MessageFormat;
 import java.util.Scanner;

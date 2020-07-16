@@ -77,6 +77,7 @@ public class Functions
     public static void errorReset(String message)
     {
         System.out.println(message);
+        Functions.pressEnterToContinue();
         sc.nextLine();
     }
     //      ██████╗░███████╗░█████╗░██████╗░  ██████╗░░█████╗░░█████╗░██╗░░░░░███████╗░█████╗░███╗░░██╗
@@ -183,13 +184,10 @@ public class Functions
     //      ╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚═════╝░  ╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝╚═╝╚═╝░░╚══╝░╚═════╝░
     public static String readString() throws IOException
     {
-        String my_String;
-
         InputStreamReader isr = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(isr);
-        my_String = br.readLine();
 
-        return my_String;
+        return br.readLine();
     }
     //      ██╗░░░██╗███████╗░██████╗  ░█████╗░██████╗░  ███╗░░██╗░█████╗░
     //      ╚██╗░██╔╝██╔════╝██╔════╝  ██╔══██╗██╔══██╗  ████╗░██║██╔══██╗
